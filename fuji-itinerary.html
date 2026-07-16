@@ -1,0 +1,671 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>🗻 富士山之旅 · 行程文档 (7.23-7.26)</title>
+<style>
+  :root {
+    --bg: #fafafa; --card: #fff; --border: #e0e0e0;
+    --text: #2c2c2c; --muted: #666; --accent: #c0392b;
+    --blue: #2980b9; --green: #27ae60; --orange: #e67e22;
+    --purple: #8e44ad; --red: #e74c3c; --warn-bg: #fff3cd; --warn-border: #ffc107;
+    --shadow: 0 2px 12px rgba(0,0,0,.08); --radius: 14px;
+  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { font-family: -apple-system,"SF Pro Text","Hiragino Sans","Noto Sans SC",sans-serif; background:var(--bg); color:var(--text); line-height:1.7; padding:20px; max-width:900px; margin:auto; }
+
+  /* Header */
+  .hero { text-align:center; padding:40px 20px 30px; }
+  .hero h1 { font-size:28px; letter-spacing:.5px; }
+  .hero .subtitle { font-size:15px; color:var(--muted); margin-top:6px; }
+  .hero .emoji { font-size:48px; display:block; margin-bottom:10px; }
+
+  /* Overview */
+  .overview { display:flex; gap:10px; justify-content:center; flex-wrap:wrap; margin:24px auto; max-width:720px; }
+  .ovw-chip { background:var(--card); border:1px solid var(--border); border-radius:999px; padding:8px 18px; font-size:13px; font-weight:500; }
+
+  /* Day card */
+  .day { background:var(--card); border-radius:var(--radius); box-shadow:var(--shadow); margin:16px 0; overflow:hidden; border-left:4px solid var(--accent); }
+  .day-header { padding:18px 22px 12px; border-bottom:1px solid var(--f0f0f0,#eee); }
+  .day-header .date { font-weight:700; font-size:17px; }
+  .day-header .dow { font-size:13px; color:var(--muted); margin-left:8px; }
+  .day-header .tag { display:inline-block; font-size:11px; padding:2px 10px; border-radius:99px; color:#fff; margin-left:10px; vertical-align:middle; }
+  .tag-flight{background:var(--purple)} .tag-hotel{background:var(--blue)} .tag-hike{background:var(--green)} .tag-transit{background:var(--orange)} .tag-return{background:var(--red)}
+
+  .day-body { padding:16px 22px 22px; }
+
+  /* Timeline item */
+  .item { position:relative; padding-left:26px; margin:16px 0; }
+  .item::before { content:''; position:absolute; left:6px; top:4px; bottom:-4px; width:2px; background:#ddd; }
+  .item:last-child::before { display:none; }
+  .dot { position:absolute; left:2px; top:6px; width:12px; height:12px; border-radius:50%; border:2px solid var(--blue); background:#fff; z-index:1; }
+  .dot.flight{border-color:var(--purple);background:#f3e5f5} .dot.hotel{border-color:var(--blue);background:#e3f2fd}
+  .dot.hike{border-color:var(--green);background:#e8f5e9} .dot.transit{border-color:var(--orange);background:#fff3e0}
+  .dot.return{border-color:var(--red);background:#ffebee} .dot.alert{border-color:var(--red);background:var(--red)}
+
+  .time-badge { display:inline-block; font-size:12px; font-weight:600; padding:2px 8px; border-radius:6px; background:#eee; color:var(--muted); margin-right:6px; }
+  .item-title { font-weight:600; font-size:15px; }
+  .item-desc { font-size:13.5px; color:var(--muted); margin-top:4px; }
+  .item-desc strong { color:var(--text); }
+  .item-detail { font-size:13px; margin-top:6px; padding:8px 12px; background:#f7f7f7; border-radius:8px; line-height:1.65; }
+
+  /* Warning / callout */
+  .callout { border-radius:10px; padding:14px 18px; margin:14px 0; font-size:13.5px; line-height:1.65; }
+  .callout-warn { background:var(--warn-bg); border:1px solid var(--warn-border); color:#856404; }
+  .callout-info { background:#e8f4fd; border:1px solid #a8d1f0; color:#0c5460; }
+  .callout-danger { background:#fdecea; border:1px solid #f5c6cb; color:#721c24; }
+
+  /* Timetable */
+  .tt { width:100%; border-collapse:collapse; margin:8px 0; font-size:13px; }
+  .tt th { background:#f0f0f0; padding:6px 10px; text-align:left; font-weight:600; }
+  .tt td { padding:5px 10px; border-bottom:1px solid #eee; }
+  .tt tr:hover td { background:#fafafa; }
+  .tt .highlight { background:#fff8e1; font-weight:600; }
+
+  /* Section title */
+  .sect { font-size:15px; font-weight:700; margin:18px 0 8px; padding-bottom:4px; border-bottom:2px solid #eee; display:flex; align-items:center; gap:8px; }
+  .sect .icon { font-size:18px; }
+
+  /* Transport badge */
+  .tbadge { display:inline-block; font-size:11px; padding:2px 8px; border-radius:4px; font-weight:500; color:#fff; margin-right:4px; }
+  .tb-bus{background:var(--green)} .tb-train{background:var(--blue)} .tb-shuttle{background:var(--orange)} .tb-walk{background:var(--purple)}
+  .tb-plane{background:var(--purple)} .tb-taxi{background:var(--muted,#888)}
+
+  /* Footer */
+  footer { text-align:center; padding:30px 0 20px; font-size:12px; color:var(--muted); }
+  a { color:var(--blue); text-decoration:none; } a:hover{text-decoration:underline}
+
+  @media print {
+    body{padding:0;background:#fff} .day{box-shadow:none;border:1px solid #ddd} .callout-warn{background:#fffbe6}
+  }
+</style>
+</head>
+<body>
+
+<!-- ===== HERO ===== -->
+<div class="hero">
+  <span class="emoji">🗻</span>
+  <h1>富士山攀登之旅 · 行程文档</h1>
+  <div class="subtitle">香港 → 東京羽田 → 河口湖 → 富士登山（須走線上下·原路返回）→ 成田机场<br>July 23–26, 2026</div>
+</div>
+
+<!-- ===== OVERVIEW CHIPS ===== -->
+<div class="overview">
+  <span class="ovw-chip">✈️ 7/23 香港→羽田 20:00-01:20</span>
+  <span class="ovw-chip">🏨 7/24 MYSTAYS羽田 + Fuji View Hotel</span>
+  <span class="ovw-chip">🚴 7/24 河口湖骑行 & 温泉</span>
+  <span class="ovw-chip">⛰️ 7/25 須走線登山 → 上江戸屋（本八合目）宿营</span>
+  <span class="ovw-chip">🌅 7/26 冲顶日出 → 須走線下撤回五合目 → 成田</span>
+</div>
+
+<!-- ═══════════════ DAY 0 ═══════════════ -->
+<div class="day" style="border-left-color:var(--purple)">
+  <div class="day-header">
+    <span class="date">Day 0 · 7月23日（周四）</span><span class="dow"></span>
+    <span class="tag tag-flight">✈️ 跨夜航班</span>
+  </div>
+  <div class="day-body">
+
+    <div class="item"><div class="dot flight"></div>
+      <span class="time-badge">20:00</span>
+      <span class="item-title">香港国际机场 T2 出发</span>
+      <div class="item-desc">国际航班，飞行时间约 3h20m</div>
+    </div>
+
+    <div class="item"><div class="dot flight"></div>
+      <span class="time-badge">01:20 (+1)</span>
+      <span class="item-title">抵达东京羽田机场 T3</span>
+      <div class="item-desc">
+        <strong>入境 + 取行李</strong> 预计 01:40–02:00 完成
+      </div>
+    </div>
+
+    <div class="item"><div class="dot hotel"></div>
+      <span class="time-badge">~02:30</span>
+      <span class="item-title">前往 MYSTAYS 羽田酒店入住</span>
+      <div class="item-detail">
+        🚕 方式：从羽田T3打车约 5 分钟 / 酒店免费穿梭巴士（如运营）<br>
+        📍 酒店：<strong>HOTEL MYSTAYS Haneda（ホテルマイステイズ羽田）</strong>，位于羽田机场附近（穴守稲荷/天空橋一带）<br>
+        💡 建议：提前在 Booking/Agoda 上预订含早房型；当晚只睡几小时，第二天一早出发
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ═══════════════ DAY 1 ═══════════════ -->
+<div class="day" style="border-left-color:var(--blue)">
+  <div class="day-header">
+    <span class="date">Day 1 · 7月24日（周五）</span><span class="dow">羽田 → 河口湖 → Fuji View Hotel</span>
+    <span class="tag tag-hotel">🏨 湖畔酒店</span>
+  </div>
+  <div class="day-body">
+
+    <!-- ── Morning Transit ── -->
+    <div class="sect"><span class="icon">🚌</span>上午：羽田机场 → Fuji View Hotel（官方推荐路线）</div>
+
+    <div class="callout callout-info">
+      <strong>📌 以下为 Fuji View Hotel 官网推荐的两条从羽田机场到酒店的交通方案</strong>
+    </div>
+
+    <div class="item"><div class="dot transit"></div>
+      <span class="time-badge">方案 A（常用路線）</span>
+      <span class="item-title">羽田 → 新宿转高速巴士 → 河口湖站 → 接驳巴士 → 酒店 · 总计约 180 分钟</span>
+      <div class="item-detail">
+        <table class="tt" style="margin-bottom:10px">
+          <tr><th style="width:28px"></th><th>路段</th><th>方式</th><th style="text-align:right">耗时</th></tr>
+          <tr><td>1️⃣</td><td>羽田機場 → 新宿站西口</td><td><span class="tb-train">🚃 機場豪華巴士（Limousine Bus）</span></td><td style="text-align:right"><strong>约 60 分钟</strong></td></tr>
+          <tr><td>2️⃣</td><td>新宿站西口 → Busta新宿</td><td><span class="tb-walk">🚶 步行</span></td><td style="text-align:right">约 2 分钟</td></tr>
+          <tr><td>3️⃣</td><td>Busta新宿 → 河口湖駅</td><td><span class="tb-bus">🚌 富士急行高速巴士</span></td><td style="text-align:right"><strong>约 105 分钟</strong></td></tr>
+          <tr><td>4️⃣</td><td>河口湖駅 → Fuji View Hotel</td><td><span class="tb-shuttle">🚌 酒店接駁巴士 / 出租车</span></td><td style="text-align:right">约 10 分钟</td></tr>
+        </table>
+        💡 <strong>优势：</strong>班次密集灵活，高速巴士每 15–30 分钟一班（05:00–23:00），不依赖固定发车时间<br>
+        💴 票价参考：利木津巴士 + 河口湖高速巴士合计约 <strong>¥3,500–4,500</strong>（以购票页面为准）<br>
+        🎯 若 07:00 从羽田出发 → ~10:50 抵达河口湖站 → 11:00 左右到达酒店
+      </div>
+    </div>
+
+    <div class="item"><div class="dot transit"></div>
+      <span class="time-badge" style="background:#d4edda;color:#155724">方案 B（共同路線）· 最省心</span>
+      <span class="item-title">羽田 → 直达河口湖站（Express Airport Bus）→ 接驳巴士 → 酒店 · 总计约 170 分钟</span>
+      <div class="item-detail">
+        <table class="tt" style="margin-bottom:10px">
+          <tr><th style="width:28px"></th><th>路段</th><th>方式</th><th style="text-align:right">耗时</th></tr>
+          <tr><td>1️⃣</td><td>羽田機場国際航站樓 → 河口湖駅</td><td><span class="tb-bus">🚌 富士急行 快速機場巴士（Express Airport Bus）</span></td><td style="text-align:right"><strong>约 150 分钟</strong></td></tr>
+          <tr><td>2️⃣</td><td>河口湖駅 → Fuji View Hotel</td><td><span class="tb-shuttle">🚌 酒店接駁巴士 / 出租车</span></td><td style="text-align:right">约 10 分钟</td></tr>
+        </table>
+        ✈️ <strong>羽田机场国际线航站楼出发时刻（每天仅 2 班）：</strong><br>
+        　• <strong>上午 10:05 发车</strong> → 预计 12:35 抵达河口湖站 → 接驳 13:45 到酒店<br>
+        　• <strong>下午 13:45 发车</strong> → 预计 16:15 抵达河口湖站 → 接驳 16:45 到酒店<br><br>
+        ⚠️ <strong>注意：</strong>每天仅 2 趟往返！<br>
+        　• 上车点：羽田 T3 国际线航站楼 2F 巴士售票处<br>
+        　• 下车点：<strong>河口湖站 2 号巴士站</strong><br>
+        　• 回程同样仅 2 班（需提前确认回程时间）<br>
+        　• 💴 票价以机场巴士/购票页面为准（不在酒店官网固定列示）<br>
+        💡 <strong>优势：</strong>无需换乘、行李舱宽敞、一觉睡到河口湖<br>
+        💡 <strong>风险：</strong>错过即等下一班（间隔近4小时）；旺季可能售罄，建议提前在 japanbusonline.com 或柜台购票
+      </div>
+    </div>
+
+    <div class="callout callout-info">
+      <strong>📋 方案对比 & 建议：</strong><br>
+      • 想<strong>多睡一会儿</strong>、不想折腾换乘 → 选 <strong>方案 B 的 10:05 班直达车</strong>（到酒店约13:45，时间刚好）<br>
+      • 想<strong>灵活掌握时间</strong>、怕误车/售罄 → 选 <strong>方案 A 经新宿</strong>（班次多，随时有车）<br>
+      • 你凌晨1:20才落地羽田，若休息到9点左右自然醒再出门，<strong>方案B的10:05班或方案A的9:00-10:00新宿出发都合适</strong>
+    </div>
+
+    <!-- ── Transfer to Hotel ── -->
+    <div class="sect"><span class="icon">🏨</span>中午：河口湖站 → Fuji View Hotel（接驳巴士详情）</div>
+
+    <div class="item"><div class="dot transit"></div>
+      <span class="time-badge">~12:35 / ~16:15</span>
+      <span class="item-title">河口湖站 → Fuji View Hotel（免费接驳巴士）</span>
+      <div class="item-detail">
+        <span class="tb-shuttle">🚌 酒店免费接驳巴士（Shuttle Bus）</span><br><br>
+
+        📍 <strong>上车点（河口湖站 → 酒店）：</strong>河口湖駅前 <strong>#10 巴士站（Boarding location #10）</strong><br>
+        　→ 位于 Tourist Information Center（旅游咨询中心）旁边，见下方示意图<br>
+        　🚌 巴士车身标有<strong>「富士景観飯店 / Fuji-View Hotel」</strong>字样<br><br>
+
+        📍 <strong>上车点（酒店 → 河口湖站）：</strong>Fuji View Hotel 正门入口处<br><br>
+
+        ⏱️ 车程约 <strong>10 分钟</strong> · 💴 免费 · 无需预约<br>
+        🎒 大件行李可放置于巴士行李舱<br><br>
+
+        📐 <strong>巴士规格与载客量：</strong><br>
+        　• Micro Bus（小型巴士）：<strong>17 人座</strong><br>
+        　• Wagon（厢型车）：<strong>9 人座</strong><br>
+        　• 全车<strong>禁烟</strong><br>
+        　• 仅往返于 Fuji View Hotel 与 Kawaguchiko Station 之间
+
+        <table class="tt" style="margin-top:10px">
+          <tr><th colspan="2" style="text-align:center">📋 Fuji View Hotel 接驳巴士 时刻表</th></tr>
+          <tr><th style="width:50%">河口湖站 → 酒店 发车</th><th>酒店 → 河口湖站 发车（返程参考）</th></tr>
+          <tr><td>08:45</td><td>08:30</td></tr>
+          <tr><td>09:45</td><td>09:30</td></tr>
+          <tr><td>10:45</td><td>10:30</td></tr>
+          <tr><td>11:45</td><td>11:30</td></tr>
+          <tr class="highlight"><td><strong>13:45</strong></td><td><strong>13:30</strong></td></tr>
+          <tr><td>14:45</td><td>14:30</td></tr>
+          <tr><td>15:45</td><td>15:30</td></tr>
+          <tr><td>16:45</td><td>16:30</td></tr>
+          <tr><td>17:45</td><td>17:30</td></tr>
+          <tr><td>18:45</td><td>18:30</td></tr>
+          <tr><td>19:45</td><td>19:30</td></tr>
+        </table>
+
+        <div class="callout callout-info" style="margin-top:8px">
+          ℹ️ 酒店官网当前列出上述全日时刻（自 2024/10/1 起）。官网同时提示：时刻可能因恶劣天气或严重交通拥堵临时变更/停运；出发前可电话确认酒店：+81-555-83-2211
+        </div>
+
+        <div style="margin-top:12px;border:1px solid #ddd;border-radius:8px;overflow:hidden;background:#fff;">
+          <img src="/Users/bill/.workbuddy/clipboard-images/clipboard-2026-07-16T05-58-28-710Z-3a8d406c.png"
+               alt="河口湖站 #10 接驳巴士乘车点位置图"
+               style="width:100%;display:block;">
+          <div style="padding:6px 12px;font-size:11px;color:#888;background:#f9f9f9;text-align:center;">
+            📍 河口湖駅前 #10 巴士站位置示意图 — 接驳巴士在 Tourist Information Center 旁上车
+          </div>
+        </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="item"><div class="dot hotel"></div>
+      <span class="time-badge">~14:00</span>
+      <span class="item-title">抵达 Fuji View Hotel · 办理入住</span>
+      <div class="item-desc">正式入住时间 <strong>15:00</strong>，但可先寄存行李、使用设施。</div>
+    </div>
+
+    <!-- ── Afternoon Activities ── -->
+    <div class="sect"><span class="icon">🌿</span>下午活动</div>
+
+    <div class="item"><div class="dot hike"></div>
+      <span class="time-badge">15:00 – 17:30</span>
+      <span class="item-title">🚴‍♂️ 河口湖环湖骑行</span>
+      <div class="item-detail">
+        📍 租车点：河口湖站周边 / 酒店前台咨询租车服务<br>
+        🛤️ 推荐路线：河口湖北岸环湖道（逆时针方向，富士山景最佳）<br>
+        ⏱️ 全程约 15–20 km，骑行 2–3 小时，平缓易骑<br>
+        🎫 租车费约 ¥1,000–2,000 / 日<br>
+        📸 必拍景点：<strong>長崎公園</strong>（经典富士山倒影）、<strong>河口湖大橋</strong>
+      </div>
+    </div>
+
+    <div class="item"><div class="dot hotel"></div>
+      <span class="time-badge">18:00 – 21:00</span>
+      <span class="item-title">♨️ 温泉 + 晚餐</span>
+      <div class="item-detail">
+        🌊 Fuji View Hotel 内有<strong>天然温泉大浴场</strong>（男女分开）<br>
+        🍽️ 晚餐：酒店内餐厅（含晚餐套餐需 19:45 前入住）/ 河口湖站周边居酒屋<br>
+        💡 温泉营业至晚间，骑行后泡汤恢复体力，为明日登山做准备
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ═══════════════ DAY 2 ═══════════════ -->
+<div class="day" style="border-left-color:var(--green)">
+  <div class="day-header">
+    <span class="date">Day 2 · 7月25日（周六）</span><span class="dow">河口湖 → 御殿场 → 須走口五合目 → 上江戸屋（本八合目）</span>
+    <span class="tag tag-hike">⛰️ 登山日</span>
+  </div>
+  <div class="day-body">
+
+    <!-- ── Morning: To Gotemba ── -->
+    <div class="sect"><span class="icon">🧳</span>上午：Fuji View Hotel → 御殿场（轻装优先）</div>
+
+    <div class="callout callout-info">
+      ✅ <strong>主用行李方案：御殿場駅旁人工寄存（已找到公开服务信息）</strong><br><br>
+      位置：JR 御殿場駅步行约 1 分钟的 <strong>Mt. Fuji Gotemba Hakone Tourist Information</strong>（静岡県御殿場市新橋1940-10）。<br>
+      公开服务信息：营业 <strong>09:00–17:00</strong>；当天寄存 ¥600 / 件，<strong>过夜 ¥1,100 / 件</strong>，须在 17:00 前取回。<br>
+      📌 这使路线顺畅：7/25 在御殿場駅寄大件 → 11:40 上山；7/26 下山回同一车站取回。建议出发前通过电话 +81-550-83-4770 或邮件 annai@gotemba.gr.jp 确认 7/25–7/26 周末大件行李的余位、尺寸与是否需预约。
+    </div>
+
+    <div class="item"><div class="dot transit"></div>
+      <span class="time-badge">08:30–08:40</span>
+      <span class="item-title">Fuji View Hotel → 河口湖站</span>
+      <div class="item-desc">乘坐酒店 <strong>08:30 接驳车</strong>（约10分钟），08:40 左右抵达河口湖站；若担心满员或延误，08:20 前直接打车到车站。</div>
+    </div>
+
+    <div class="item"><div class="dot transit"></div>
+      <span class="time-badge">09:00 – 10:30</span>
+      <span class="item-title">河口湖站 → 御殿場站（普通路線巴士 A1 · 直接到登山巴士站）</span>
+      <div class="item-detail">
+        <span class="tb-bus">🚌 富士急 Mobility 河口湖线【A1】</span>：忍野八海经由 → 御殿場駅<br>
+        📍 上车点：河口湖駅巴士站；目的地认准<strong>「御殿場駅」</strong>，不要坐到奥莱<br>
+        ⏱️ 当前公开时刻：<strong>09:00 发 → 10:30 抵御殿場駅</strong>（约90分钟）<br>
+        💴 票价参考约 <strong>¥1,750</strong>；普通路線巴士，无需座位预约<br>
+        🎯 比先坐 G-Liner 到奥莱再转车更稳：到御殿場駅后有约 70 分钟缓冲，可从容赶 11:40 登山巴士。
+
+        <div class="callout callout-info">
+          ✅ <strong>这是本次优化后的主方案：</strong>登山日不经过奥莱。请在出发前一周再用富士急官方时刻表/NAVITIME 按 7/25 日期复核 A1 班次；如因临时调度取消，则打车至御殿場駅或改按 13:00 登山巴士保底。
+        </div>
+      </div>
+    </div>
+
+    <div class="item"><div class="dot transit"></div>
+      <span class="time-badge">10:30 – 11:35</span>
+      <span class="item-title">御殿場站：寄大件行李 / 补给 / 完成入山手续</span>
+      <div class="item-detail">
+        🧳 <strong>寄存：</strong>步行约 1 分钟至 Mt. Fuji Gotemba Hakone Tourist Information，办理一晚寄存；保留寄存单据，7/26 必须在 17:00 前取回。<br>
+        🎒 上山只带登山包：过夜用品、水、食物、头灯、保暖层、雨具和现金；大箱/非登山衣物全部留下。<br>
+        🥤 办完寄存后利用余量补水、上厕所、最后检查装备，并确认 FUJI NAVI 入山许可（QR码）。<br>
+        🎯 11:25 前到 3号站牌附近候车；7/25 是周六，建议预留排队时间。
+      </div>
+    </div>
+
+    <!-- ── To Subashiri 5th ── -->
+    <div class="sect"><span class="icon">⛰️</span>中午：御殿场 → 須走口五合目（登山口）</div>
+
+    <div class="callout callout-danger">
+      🔴 <strong>关键路线说明：</strong>你计划走<strong>「须走线」（Subashiri Trail）</strong>上山，其登山口为<strong>須走口五合目（Subashiri-guchi 5th Station）</strong>，位于富士山东南侧海拔约 2,000 m 处。从御殿场出发的登山巴士由<strong>富士急 Mobility</strong>运营，从<strong>JR 御殿場駅</strong>发车。采用河口湖→御殿場駅直达 A1 后，无需奥莱中转。
+    </div>
+
+    <div class="item"><div class="dot hike"></div>
+      <span class="time-badge">目标 11:40；稳妥 13:00</span>
+      <span class="item-title">🚌 富士急 Mobility 登山巴士 Q-line：御殿場駅 → 須走口五合目</span>
+      <div class="item-detail">
+        <span class="tb-bus">🚐 【Q】Subashiri Trail Line（須走口五合目方面）</span><br>
+        📍 <strong>乘车点：</strong>JR 御殿場駅 Track 3（3番のりば）<br>
+        ⏱️ 车程约 <strong>55–60 分钟</strong>（山路弯多）<br>
+        💴 票价：<strong>单程 ¥1,780 / 往返 ¥2,500</strong>（儿童半价）<br>
+        🎫 <strong>无需预约</strong>，排队上车，车上支付现金或 IC 卡<br>
+        📅 运营期：<strong>2026年7月1日 – 9月10日（每日运营）</strong><br>
+        🎯 到达五合目：11:40 班约 12:40 抵达；13:00 班约 14:00 抵达
+
+        <table class="tt" style="margin-top:10px">
+          <tr><th colspan="3">📋 【Q】御殿場駅 → 須走口五合目 登山巴士 时刻表 (7/1-9/10 每日)</th></tr>
+          <tr><th>御殿場駅発</th><th>須走口五合目着</th><th>备注</th></tr>
+          <tr><td>06:45</td><td>07:45</td><td>最早</td></tr>
+          <tr><td>07:45</td><td>08:45</td><td></td></tr>
+          <tr><td>8:40</td><td>9:40</td><td></td></tr>
+          <tr><td>9:40</td><td>10:40</td><td></td></tr>
+          <tr class="highlight"><td><strong>10:40</strong></td><td><strong>11:40</strong></td><td>✅ 可选</td></tr>
+          <tr class="highlight"><td><strong>11:40</strong></td><td><strong>12:40</strong></td><td>✅ 主用：站旁寄包后仍有缓冲</td></tr>
+          <tr class="highlight"><td><strong>13:00</strong></td><td><strong>14:00</strong></td><td>✅ 稳妥兜底；上山会偏晚</td></tr>
+          <tr><td>13:55</td><td>14:55</td><td>⚠️ 不建议，抵达山屋会太晚</td></tr>
+          <tr class="highlight"><td><strong>15:30</strong></td><td><strong>16:30</strong></td><td>⚠️ 最末日常班车</td></tr>
+        </table>
+
+        <div class="callout callout-warn">
+          ⚠️ <strong>时间控制：</strong>A1 09:00 预计 10:30 到御殿場駅，寄存点距车站约 1 分钟，主用 11:40 班有约 70 分钟处理寄包/补给/入山手续。若 A1 道路延误或寄存点临时满位，立即放弃 11:40，改按 13:00 上山；15:30 不适合本行程。
+        </div>
+      </div>
+    </div>
+
+    <!-- ── Ascent ── -->
+    <div class="sect"><span class="icon">🥾</span>下午–傍晚：須走線登山（五合目 → 上江戸屋 / 本八合目）</div>
+
+    <div class="item"><div class="dot hike"></div>
+      <span class="time-badge">12:40/14:00 → 傍晚</span>
+      <span class="item-title">須走口五合目 → 上江戸屋（本八合目）· 須走线上坡</span>
+      <div class="item-detail">
+        🗺️ <strong>路线概要：</strong><br>
+        　• 起点：須走口五合目（海拔 ~2,000 m）<br>
+        　• 终点：<strong>上江戸屋 / 本八合目 胸突江戸屋（Kami-Edo-ya / Munatsuki Edo-ya）</strong>（海拔约 <strong>3,370 m</strong>；公开资料口径略有差异）<br>
+        　• 須走口五合目海拔约 2,000 m → 本八合目，海拔爬升约 <strong>1,350 m</strong><br>
+        　• 官方给出的須走线全程上山参考为 <strong>6.9 km / 约7小时到山顶</strong>；到上江戸屋不是山顶，建议按 <strong>4.5–6小时</strong> 保守预估（含休息、周末拥堵）<br><br>
+        🏔️ <strong>须走线特点：</strong><br>
+        　• 东侧路线，森林路段较长，视野开阔处可眺望骏河湾<br>
+        　• 須走線在<strong>八合目附近与吉田線汇合</strong>，之后共用路径至山顶；上江戸屋位于汇合后的路段上（本八合目，公开资料多标为约 3,350–3,370 m），当晚住宿顺路<br>
+        　• <strong>次日仍原路沿須走線下撤回須走口五合目</strong>（注意八合目分岔口认准「須走口 →」，别误入吉田口下到北麓河口湖，详见 Day 3）<br>
+        　• 相比吉田线人少，更安静<br><br>
+        🏠 <strong>上江戸屋（本八合目・胸突江戸屋）：</strong><br>
+        　• 山小屋住宿（通铺/胶囊式床位）<br>
+        　• 提供简单晚餐和早餐（需额外付费或含在房费中）<br>
+        　• 有饮用水补给（瓶装水较贵，建议自备部分）<br>
+        　• <strong>务必提前预约！</strong>旺季非常紧张；请在预约页确认 7/25 当晚是否显示 ○（可订）<br>
+        　• 🔗 预约：<a href="https://www.yamatan.net/hut/munatsukiedoya/plan?year=2026&month=07" target="_blank">yamatan.net 上江戸屋预约页</a><br><br>
+        ⏰ <strong>时间节奏参考（两种情况）：</strong><br>
+        　• <strong>理想版：</strong>11:40 登山巴士 → 12:40 抵达五合目 → 13:00 开爬 → 18:00–19:00 抵达上江戸屋<br>
+        　• <strong>稳妥兜底版：</strong>13:00 登山巴士 → 14:00 抵达五合目 → 14:20 开爬 → 19:00–20:00 抵达上江戸屋（偏晚，需提前和山屋确认最晚入住/晚餐安排）<br>
+        　• 上山当天务必在五合目完成 FUJI NAVI / 入山手续并保留头灯在随手位置<br>
+        　• 到山屋后尽快吃饭、整理冲顶包，尽量睡到 01:00 前后
+      </div>
+    </div>
+
+    <div class="callout callout-danger">
+      🚨 <strong>重要装备清单（必带）：</strong><br>
+      • 头灯（及备用电池）· 登山杖（必备！）· 保暖中层（抓绒/薄羽绒）· 冲锋衣裤（防风防水）· 手套· 帽子· 太阳镜· SPF50+防晒霜<br>
+      • 水 2L+ · 高热量零食（能量胶、坚果、巧克力）· 纸币零钱（山上无电子支付）<br>
+      • 垃圾袋（所有垃圾必须自行带走！）· 急救包 · 身份证复印件<br>
+      • 登山鞋（防滑高帮最佳）
+    </div>
+
+  </div>
+</div>
+
+<!-- ═══════════════ DAY 3 ═══════════════ -->
+<div class="day" style="border-left-color:var(--red)">
+  <div class="day-header">
+    <span class="date">Day 3 · 7月26日（周日）</span><span class="dow">冲顶日出 → 須走線下撤回五合目 → 御殿场 → 成田机场</span>
+    <span class="tag tag-return">✈️ 返程日</span>
+  </div>
+  <div class="day-body">
+
+    <!-- ── Summit push ── -->
+    <div class="sect"><span class="icon">🌅</span>凌晨：上江戸屋（本八合目）→ 山顶（冲顶 · 須走/吉田共通登山道）</div>
+
+    <div class="item"><div class="dot hike"></div>
+      <span class="time-badge">01:00 – 02:00</span>
+      <span class="item-title">离开上江戸屋（本八合目）· 开始夜间冲顶（須走/吉田共通路段）</span>
+      <div class="item-detail">
+        上江戸屋（本八合目）→ 十合目（山顶）为須走/吉田共通路段，海拔上升约 <strong>400–430 m</strong><br>
+        ⏱️ 正常约 <strong>1.5–2.5 小时</strong>；周末御来光前可能拥堵，需预留到 <strong>3 小时</strong><br>
+        🌙 夜间气温 -2°C ~ 5°C，风大，全程开<strong>头灯</strong><br>
+        🎯 目标抵顶：<strong>04:00–05:00</strong>
+      </div>
+    </div>
+
+    <div class="item"><div class="dot alert"></div>
+      <span class="time-badge">~04:45</span>
+      <span class="item-title">🌅 日出！（富士山顶）</span>
+      <div class="item-desc">7月下旬富士山日出约 04:40–04:50。在山顶火山口边缘观赏"御来光"——一生难忘的时刻。</div>
+    </div>
+
+    <!-- ── Descent via Subashiri ── -->
+    <div class="sect"><span class="icon">↘️</span>清晨：須走線（Subashiri Trail）下撤 · 原路回須走口五合目</div>
+
+    <div class="callout callout-danger">
+      🔴 <strong>⚠️ 下山最关键的一点：八合目下的岔路口，务必走「須走口方向」！</strong><br><br>
+      你要回的是<strong>上山起点 = 須走口五合目</strong>（御殿場登山巴士的那个五合目），所以下山走<strong>須走線下山道</strong>原路返回。<br><br>
+      ⚠️ <strong>富士山最著名的下山迷路点就在这里：</strong>从山顶下来，須走線与吉田線<strong>共用同一条下山道</strong>直到<strong>八合目「下江戸屋」附近的分岔点</strong>。在此处必须认准指示牌走<strong style="color:#c0392b">「須走口下山道 / Subashiri Trail →」</strong>（須走线为红色标识），<strong>切勿</strong>随大流走成「吉田口下山道」（会一路下到北麓河口湖，方向完全相反、回不了御殿场！）。<br><br>
+      ✅ <strong>正确返程链路（简单直接）：</strong><br>
+      　1. 山顶 → 八合目分岔口 →（须走线下山道·含著名「砂走り」砂跑段）→ <strong>須走口五合目</strong> — 约 3–4h（官方参考约4h）<br>
+      　2. 須走口五合目 →（须走线登山巴士）→ <strong>御殿場駅</strong> — 约 60min<br>
+      　3. 御殿場駅 →（免费接驳）→ <strong>御殿場奥莱取行李</strong> — 约 10min<br>
+      　4. 御殿場奥莱 → <strong>成田机场</strong>（详见下方）<br><br>
+      💡 相比绕北麓河口湖，这条原路返回<strong>省掉约 2 小时中转</strong>，且下山巴士班次多（末班 20:00），从容很多。
+    </div>
+
+    <div class="item"><div class="dot hike"></div>
+      <span class="time-badge">05:30 – 09:30/10:00</span>
+      <span class="item-title">山顶 → 須走口五合目（須走線下山道）</span>
+      <div class="item-detail">
+        🗺️ 从山顶沿下山道下撤，<strong>八合目分岔口认准「須走口 →」</strong>（见上方红框提醒）<br>
+        ⬇️ 官方路线参考：須走线下山道约 <strong>6.2 km / 约4小时</strong>；体能好且砂走り顺利可更快<br>
+        🏃 中段有須走線特色的 <strong>「砂走り」（砂跑）</strong>——从七合目后开始的大段火山砂坡，建议穿高帮鞋+绑腿/护目镜/口罩防沙尘<br>
+        ⏱️ 预计 <strong>3–4 小时</strong>（保守口径；膝盖压力大，别为赶车冒险）<br>
+        🎯 抵达須走口五合目：<strong>约 09:00–10:00</strong><br>
+        💡 善用登山杖保护膝盖；砂走り虽爽但注意控制速度别摔
+      </div>
+    </div>
+
+    <!-- ── Subashiri 5th to Gotemba ── -->
+    <div class="item"><div class="dot transit"></div>
+      <span class="time-badge">~09:00 – 10:30</span>
+      <span class="item-title">須走口五合目 → 御殿場駅（须走线登山巴士 · 下山方向）</span>
+      <div class="item-detail">
+        <span class="tb-bus">🚐 【Q】Subashiri Trail Line（下山方向：須走口五合目 → 御殿場駅）</span><br>
+        📍 上车点：須走口五合目 バス停<br>
+        ⏱️ 车程约 <strong>60 分钟</strong><br>
+        💴 票价：<strong>单程 ¥1,780 / 往返 ¥2,500</strong>（去程已买往返票则直接用回程）<br>
+        🎫 无需预约，排队上车<br>
+        📅 夏季运营期：7/1 – 9/10（每日）
+
+        <table class="tt" style="margin-top:8px">
+          <tr><th colspan="2">📋 【Q】須走口五合目 → 御殿場駅 下山巴士 时刻表 (7/1-9/10 每日)</th></tr>
+          <tr><th>須走口五合目発</th><th>御殿場駅着</th></tr>
+          <tr><td>07:55</td><td>~08:55</td></tr>
+          <tr><td>08:55</td><td>~09:55</td></tr>
+          <tr class="highlight"><td><strong>09:55</strong></td><td><strong>~10:55 ✅</strong></td></tr>
+          <tr><td>10:55</td><td>~11:55</td></tr>
+          <tr class="highlight"><td><strong>11:55</strong></td><td><strong>~12:55 ✅</strong></td></tr>
+          <tr><td>13:00 / 14:30 / 15:30</td><td>…</td></tr>
+          <tr><td>17:00 / 18:00 / 19:00 / 20:00</td><td>末班 20:00 発</td></tr>
+        </table>
+        <div class="callout callout-info">
+          ℹ️ 下山方向班次较多（一直到 20:00）。按 09:00–10:00 下到五合目，通常可接 09:55 或 10:55；若腿部疲劳，改搭 11:55 也仍有余量。
+        </div>
+      </div>
+    </div>
+
+    <!-- ── Retrieve bags and bath ── -->
+    <div class="item"><div class="dot transit"></div>
+      <span class="time-badge">10:55 / 11:55 后</span>
+      <span class="item-title">御殿場駅：取回大件行李 → 前往御殿场奥莱 Hill Side</span>
+      <div class="item-detail">
+        🧳 从 Mt. Fuji Gotemba Hakone Tourist Information 取回大件；请核对寄存单据并在 <strong>17:00 前</strong>完成取件。<br>
+        <span class="tb-shuttle">🚌 免费接驳巴士</span> JR 御殿場駅「箱根乙女口」2号站 → 御殿場プレミアム・アウトレット，约 <strong>5–10 分钟</strong>，站发每小时 <strong>:00 / :15 / :30 / :45</strong>。<br>
+        📍 到奥莱后前往 Hill Side P4 停车场顶层的<strong>木の花の湯（Konohana no Yu）</strong>；它是日归温泉设施，不是普通洗手间。
+      </div>
+    </div>
+
+    <!-- ── Bath at Outlet ── -->
+    <div class="item"><div class="dot return"></div>
+      <span class="time-badge">11:15 – 13:40</span>
+      <span class="item-title">♨️ 木の花の湯：寄放大件后洗澡 / 泡汤 / 午餐</span>
+      <div class="item-detail">
+        🧳 <strong>先处理大件：</strong>奥莱园区有收费行李寄存与投币柜，但周日余位/最大尺寸不能保证。大箱若无法寄入，请不要勉强泡汤，改为简单洗漱后直接去东京。<br>
+        ♨️ <strong>日归温泉设施「木の花の湯」</strong>位于御殿场 Premium Outlets 园区、与 HOTEL CLAD 相连；有洗洗区、室内/露天浴池、桑拿及餐厅。<br>
+        🕥 营业 <strong>10:30–22:00</strong>，最晚入馆 21:00；7/26 为周日，成人大浴场 <strong>¥2,200</strong>，已含面巾和浴巾租借。<br>
+        ⏱️ 若搭 09:55 下山巴士，10:55 到御殿場駅，可从容寄包、泡汤和午餐；若搭 10:55 下山巴士，11:55 到站，只宜快速洗澡/换衣。<br>
+        ⚠️ 14:00 出发去东京优先：最晚 13:40 离开温泉，取回大件并前往奥莱巴士站。<br>
+        ✅ 这正是保留奥莱的合理理由；登山日行李存在御殿場駅，下山日取回后临时寄在奥莱再洗漱。
+      </div>
+    </div>
+
+    <!-- ── Gotemba to Narita ── -->
+    <div class="sect"><span class="icon">✈️</span>下午：御殿场 → 成田机场</div>
+
+    <div class="callout callout-danger" style="font-size:14px">
+      ✈️ <strong>Bill 的航班：成田机场 19:25 起飞 → 23:20 抵达</strong><br>
+      国际航班建议 <strong>提前 2 小时</strong>到机场（即 17:25 前抵达成田 T2/T3）。复核后，主推<strong>经东京站转 N'EX/机场列车</strong>，不再依赖直达成田巴士：
+    </div>
+
+    <div class="item"><div class="dot return"></div>
+      <span class="time-badge" style="background:#f5c6cb;color:#721c24">不采用：東名御殿場 → 成田直达巴士</span>
+      <span class="item-title">直达成田线：当前不作为可执行方案</span>
+      <div class="item-detail">
+        复核后不再把这条线作为方案：公开资料显示该「成田空港線」存在<strong>长期运休/需重新确认</strong>的情况，且即使按旧时刻，10:45 从東名御殿場发车也与本行程下山+取行李时间冲突。<br>
+        ✅ 因此文档中删除其作为主方案的地位；如出发前官方确认复运，也只能作为额外备选，不作为本行程依赖项。
+      </div>
+    </div>
+
+    <div class="item"><div class="dot return"></div>
+      <span class="time-badge" style="background:#d4edda;color:#155724">推荐：JR巴士到东京 → N'EX</span>
+      <span class="item-title">御殿场奥莱 → 东京站/新宿 → N'EX 成田特急 → 成田机场</span>
+      <div class="item-detail">
+        <strong>Step 1:</strong> 御殿場プレミアム・アウトレット → 东京站日本桥口 / Busta 新宿<br>
+        　<span class="tb-bus">🚌 JRバス関東「東京・新宿～御殿場プレミアム・アウトレット線」</span><br>
+        　📅 官方时刻表：2026/6/1 改正；全席指定，建议提前购票<br>
+        　💴 票价：浮动制，约 <strong>¥1,800–2,500</strong>（WEB早割/繁忙期不同）
+
+        <table class="tt" style="margin-top:8px">
+          <tr><th colspan="3">📋 奥莱 → 东京/新宿 官方可用班次（节选）</th></tr>
+          <tr><th>奥莱发</th><th>到达</th><th>本行程判断</th></tr>
+          <tr class="highlight"><td><strong>14:00</strong></td><td>东京站日本桥口 15:40</td><td>✅ 最推荐，机场缓冲较好</td></tr>
+          <tr><td>15:00</td><td>东京站日本桥口 16:40</td><td>⚠️ 可用但机场缓冲变小</td></tr>
+          <tr><td>16:00</td><td>Busta 新宿 17:40</td><td>❌ 对19:25国际航班过紧</td></tr>
+        </table>
+
+        <strong>Step 2:</strong> 东京 / 新宿 → 成田机场<br>
+        　<span class="tb-train">🚃 JR Narita Express（N'EX）</span><br>
+        　⏱️ 东京站 → 成田机场最快约 <strong>53 分钟</strong>；新宿/渋谷 → 成田约 <strong>75–90 分钟</strong><br>
+        　💴 普通车指定席通常约 ¥3,000+（以购票当日为准）<br><br>
+
+        <strong>⏰ 推荐执行：</strong><br>
+        　• 11:30–13:30：奥莱简单洗漱、午餐、短暂休整<br>
+        　• <strong>14:00 奥莱发</strong> → 15:40 东京站日本桥口<br>
+        　• 16:00 前后进入 JR 东京站，乘 N'EX 或其他机场列车 → 约 17:00 前后抵达成田 ✅<br><br>
+
+        <div class="callout callout-info" style="margin-top:8px">
+          ✅ <strong>落地决策规则：</strong><br>
+          • 若 <strong>12:30 前</strong>已到御殿场奥莱：可以午餐/简单休整，搭 14:00 JR巴士去东京。<br>
+          • 若 <strong>12:30 后</strong>才到御殿場駅：建议跳过奥莱购物，直接查 NAVITIME / Google Maps 走铁路进东京/成田（御殿場線→国府津/沼津・三島→东京→成田），避免高速路堵车风险。<br>
+          • 若天气/身体状态差：不逛奥莱，机场优先。
+        </div>
+
+        <div class="callout callout-warn" style="margin-top:8px">
+          ⚠️ 原文里「奥莱 12:20 / 14:22 / 16:52 发往渋谷」是把<strong>渋谷→河口湖方向</strong>的停靠/到达信息误当成返程，已删除。返程请优先按 JR巴士到东京/新宿执行；具体购票以 JRバス関東 / 高速バスネット为准。
+        </div>
+      </div>
+    </div>
+
+    <div class="item"><div class="dot return"></div>
+      <span class="time-badge">17:30 – 19:25</span>
+      <span class="item-title">抵达成田机场 · 值机安检 · 登机</span>
+      <div class="item-desc">
+        🛂 国际航班值机柜台通常起飞前 2 小时开放<br>
+        ✈️ <strong>航班：19:25 起飞 → 23:20 抵达目的地</strong><br>
+        🎉 三天紧凑而充实的富士之旅圆满结束！
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ═════ NOTES ═════ -->
+<div class="day" style="border-left-color:var(--muted,#888)">
+  <div class="day-header">
+    <span class="date">📋 实用备忘</span>
+  </div>
+  <div class="day-body">
+    <div class="sect"><span class="icon">💰</span>预算参考（每人）</div>
+    <table class="tt">
+      <tr><th>项目</th><th>费用（日元）</th><th>备注</th></tr>
+      <tr><td>羽田→河口湖交通</td><td>~3,500–4,500</td><td>经新宿 / 羽田直达，以购票页为准</td></tr>
+      <tr><td>Fuji View Hotel 1晚</td><td>~15,000–25,000</td><td>视房型/季节</td></tr>
+      <tr><td>河口湖→御殿場駅</td><td>~1,750</td><td>普通路線巴士 A1；登山日直接到车站</td></tr>
+      <tr><td>御殿場駅过夜寄存</td><td>1,100</td><td>站旁游客中心；须17:00前取件</td></tr>
+      <tr><td>御殿場駅↔奥莱</td><td>0</td><td>下山日免费接驳，去木の花の湯洗漱</td></tr>
+      <tr><td>奥莱当天二次寄存</td><td>以现场为准</td><td>大箱能否放入柜/寄存服务待确认</td></tr>
+      <tr><td>木の花の湯（日曜）</td><td>2,200</td><td>大浴场，含面巾/浴巾租借</td></tr>
+      <tr><td>御殿场↔須走口五合目往返</td><td>2,500</td><td>登山巴士（上下同一往返票）</td></tr>
+      <tr><td>富士山入山料</td><td>4,000</td><td>须走线也适用，FUJI NAVI登记/支付</td></tr>
+      <tr><td>上江戸屋宿泊（含两餐）</td><td>以预约页为准</td><td>本八合目·周六/旺季价格不同</td></tr>
+      <tr><td>御殿场奥莱→成田机场</td><td>~5,000–6,500</td><td>JR巴士到东京/新宿 + N'EX/机场列车</td></tr>
+      <tr><td><strong>交通+入山料+站寄存+泡汤</strong></td><td><strong>~20,000–23,000 + 奥莱二次寄存</strong></td><td>不含住宿/餐饮/装备租赁</td></tr>
+    </table>
+
+    <div class="sect"><span class="icon">📱</span>实用链接</div>
+    <div class="item-detail">
+      • <a href="https://www.fujikyumobility.com/news/copy_of_202206082.html" target="_blank">富士急 Mobility 登山巴士官方页面（御殿场↔五合目）</a><br>
+      • <a href="https://www.yamatan.net/hut/munatsukiedoya/plan?year=2026&month=07" target="_blank">上江戸屋（本八合目 胸突江戸屋）预约页</a><br>
+      • <a href="https://fhr.fujiview.jp/directions/index.html?stt_lang=zh-TW" target="_blank">Fuji View Hotel 交通与接驳巴士</a><br>
+      • <a href="https://www.jrbuskanto.co.jp/jwp/topics/20260601outlet.html" target="_blank">JRバス関東：东京/新宿～御殿場 Premium Outlets 线改正通知</a><br>
+      • <a href="https://time.jrbuskanto.co.jp/bk06060.html" target="_blank">JRバス関東：东京/新宿～御殿場 Premium Outlets 官方时刻表</a><br>
+      • <a href="https://www.fujisan-climb.jp/zh-TW/modelplan-subashiri" target="_blank">富士登山官方模型计划（須走线参考）</a><br>
+      • <a href="https://www.fujisan-climb.jp/en/info/1722/" target="_blank">2026 静冈侧富士登山限制 / FUJI NAVI / 入山料说明</a><br>
+      • <a href="https://www.gotemba-konohananoyu.jp/en/" target="_blank">木の花の湯：奥莱园区日归温泉官方页面</a><br>
+      • <a href="https://tic.jnto.go.jp/chs/detail.php?id=1798" target="_blank">御殿场站旁游客中心：人工行李寄存信息</a>
+    </div>
+
+    <div class="sect"><span class="icon">🧳</span>行李方案：御殿場站过夜寄存（主用）</div>
+    <div class="callout callout-info">
+      <strong>主用：在御殿場駅旁寄存，和须走线上下山方向一致。</strong><br>
+      • <strong>地点：</strong>Mt. Fuji Gotemba Hakone Tourist Information，JR御殿場駅步行约1分钟；09:00–17:00。<br>
+      • <strong>费用：</strong>当天 ¥600 / 件；过夜 ¥1,100 / 件；最晚 17:00 前取回。<br>
+      • <strong>7/25：</strong>A1 抵站后办理过夜寄存，再走回站内搭 11:40 Q线。<br>
+      • <strong>7/26：</strong>下山巴士回御殿場駅后先取行李，再免费接驳去奥莱；把大箱临时存进奥莱投币柜/付费寄存后进入木の花之汤。若柜满或行李超大，则跳过泡汤，带箱直接进东京。<br>
+      • ⚠️ 出发前必须通过电话 +81-550-83-4770 或邮件 annai@gotemba.gr.jp 确认 7/25–7/26 是否有过夜大件余位、是否需要预约。
+    </div>
+
+    <div class="sect"><span class="icon">🔄</span>备选：河口湖寄存（不推荐）</div>
+    <div class="callout callout-warn">
+      河口湖站投币柜和站前人工寄存都可能可用，但须走线下山回的是御殿場侧；若把箱子留在河口湖，7/26 还要折返取包，会明显压缩洗漱和成田航班缓冲。因此仅在御殿場站寄存无法使用时再考虑。
+    </div>
+
+    <div class="sect"><span class="icon">⚠️</span>关键提醒</div>
+    <ul style="font-size:13.5px;padding-left:20px;line-height:2">
+      <li><strong>御殿場站过夜寄存需提前确认</strong>：游客中心公开营业至17:00、过夜¥1,100/件；7月周末务必先确认大件余位与预约要求。</li>
+      <li><strong>上江戸屋（本八合目 胸突江戸屋）务必尽早预约</strong>，在预约页确认 7/25 当晚状态（○可订 / ×满房 / 前=预约前）</li>
+      <li><strong>富士山天气预报</strong>：出发前一周开始关注，山顶天气变化极快（推荐 site：<a href="https://www.jma.go.jp/bosai/amedas/" target="_blank">JMA 雨量情報</a> 或 app: <strong>Yahoo! 天気</strong>）</li>
+      <li><strong>登山通行费 + 预约制（重要，须走线也已收费）</strong>：自 2025 年夏季起，静冈县侧三条线（<strong>須走线</strong>/御殿场/富士宫）与山梨侧吉田线一样，均实施 <strong>¥4,000 通行费</strong>，并可能配套<strong>每日人数上限 + 提前网上预约</strong>。你走須走线上下，出行前务必到官方系统<a href="https://www.fujisan-climb.jp/zh-TW/" target="_blank">富士登山官方网站</a>确认 2026 年須走线的预约方式与名额，避免当天被拦。</li>
+      <li><strong>现金准备</strong>：山上全部现金交易，建议随身携带 ¥10,000+ 纸币</li>
+      <li><strong>高原反应</strong>：从五合目（2,000m）到山顶（3,776m）海拔跨度大，注意头痛、恶心等症状，多喝水、慢节奏</li>
+      <li><strong>纹身限制</strong>Fuji View Hotel 公共浴场可能不允许纹身入浴，请提前确认</li>
+    </ul>
+
+  </div>
+</div>
+
+<footer>
+  <p>📄 本行程文档生成于 2026年7月16日 · 所有时刻表基于公开信息整理，出行前请再次核对官网最新数据</p>
+  <p>祝 Bill 攀登顺利，平安归来！🗻</p>
+</footer>
+
+</body>
+</html>
