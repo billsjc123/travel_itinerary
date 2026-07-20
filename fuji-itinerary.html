@@ -13,7 +13,7 @@
     --shadow: 0 2px 12px rgba(0,0,0,.08); --radius: 14px;
   }
   * { margin:0; padding:0; box-sizing:border-box; }
-  body { font-family: -apple-system,"SF Pro Text","Hiragino Sans","Noto Sans SC",sans-serif; background:var(--bg); color:var(--text); line-height:1.7; padding:20px; max-width:900px; margin:auto; }
+  body { font-family: -apple-system,"SF Pro Text","Hiragino Sans","Noto Sans SC",sans-serif; background:var(--bg); color:var(--text); line-height:1.7; padding:20px; max-width:1400px; margin:auto; }
 
   /* Header */
   .hero { text-align:center; padding:40px 20px 30px; }
@@ -22,11 +22,11 @@
   .hero .emoji { font-size:48px; display:block; margin-bottom:10px; }
 
   /* Overview */
-  .overview { display:flex; gap:10px; justify-content:center; flex-wrap:wrap; margin:24px auto; max-width:720px; }
+  .overview { display:flex; gap:10px; justify-content:center; flex-wrap:wrap; margin:24px auto; max-width:1280px; }
   .ovw-chip { background:var(--card); border:1px solid var(--border); border-radius:999px; padding:8px 18px; font-size:13px; font-weight:500; }
 
   /* Day card */
-  .day { background:var(--card); border-radius:var(--radius); box-shadow:var(--shadow); margin:16px 0; overflow:hidden; border-left:4px solid var(--accent); }
+  .day { background:var(--card); border-radius:var(--radius); box-shadow:var(--shadow); margin:0; overflow:hidden; border-left:4px solid var(--accent); }
   .day-header { padding:18px 22px 12px; border-bottom:1px solid var(--f0f0f0,#eee); }
   .day-header .date { font-weight:700; font-size:17px; }
   .day-header .dow { font-size:13px; color:var(--muted); margin-left:8px; }
@@ -76,15 +76,21 @@
   footer { text-align:center; padding:30px 0 20px; font-size:12px; color:var(--muted); }
   a { color:var(--blue); text-decoration:none; } a:hover{text-decoration:underline}
 
+  /* 横向按天布局 */
+  .days-grid{ display:grid; grid-template-columns:repeat(auto-fit,minmax(270px,1fr)); gap:16px; margin:18px 0; align-items:start; }
+  .day-wide{ grid-column:1 / -1; }
   @media print {
-    body{padding:0;background:#fff} .day{box-shadow:none;border:1px solid #ddd} .callout-warn{background:#fffbe6}
+    body{padding:0;background:#fff}
+    .days-grid{ display:block; }
+    .day{ box-shadow:none; border:1px solid #ddd; margin:16px 0; }
+    .callout-warn{ background:#fffbe6; }
   }
 </style>
 </head>
 <body>
 
 <!-- ===== BACK TO INDEX ===== -->
-<div style="max-width:900px;margin:0 auto;padding:14px 20px 0;">
+<div style="max-width:1400px;margin:0 auto;padding:14px 20px 0;">
   <a href="index.html" style="font-size:13px;color:var(--blue);text-decoration:none;">← 返回所有行程</a>
 </div>
 
@@ -105,6 +111,7 @@
 </div>
 
 <!-- ═══════════════ DAY 0 ═══════════════ -->
+<div class="days-grid">
 <div class="day" style="border-left-color:var(--purple)">
   <div class="day-header">
     <span class="date">Day 0 · 7月23日（周四）</span><span class="dow"></span>
@@ -603,7 +610,7 @@
 </div>
 
 <!-- ═════ NOTES ═════ -->
-<div class="day" style="border-left-color:var(--muted,#888)">
+<div class="day day-wide" style="border-left-color:var(--muted,#888)">
   <div class="day-header">
     <span class="date">📋 实用备忘</span>
   </div>
@@ -665,6 +672,7 @@
     </ul>
 
   </div>
+</div>
 </div>
 
 <footer>
