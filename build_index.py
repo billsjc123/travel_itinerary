@@ -1,12 +1,29 @@
 #!/usr/bin/env python3
 # 读取 trips.json，生成自包含的 index.html（数据内联，本地/Pages 均可）。
-# 主页按「年」分组展示所有行程。
+# 主页按「年」分组展示所有行程，hero 带全幅背景图。
 # 用法：python3 build_index.py
-import json, pathlib
+import json, pathlib, base64
 
 ROOT = pathlib.Path(__file__).resolve().parent
 data = json.loads((ROOT / "trips.json").read_text(encoding="utf-8"))
 trips_json = json.dumps(data, ensure_ascii=False)
+
+# Hero 背景图（与 build_index.py 同目录下的 hero-bg.jpg）
+hero_bg_path = ROOT / "hero-bg.jpg"
+if not hero_bg_path.exists():
+    # 也支持 .png / .jpeg 等常见扩展名
+    for ext in (".jpg", ".jpeg", ".png", ".webp"):
+        p = ROOT / ("hero-bg" + ext)
+        if p.exists():
+            hero_bg_path = p
+            break
+if not hero_bg_path.exists():
+    raise FileNotFoundError("未找到 hero-bg.jpg（请将背景图放到本目录并命名为 hero-bg.jpg）")
+
+mime = {".jpg":"image/jpeg",".jpeg":"image/jpeg",".png":"image/png",".webp":"image/webp"}
+ext = hero_bg_path.suffix.lower()
+b64 = base64.b64encode(hero_bg_path.read_bytes()).decode("ascii")
+data_uri = f"data:{mime.get(ext,'image/jpeg')};base64,{b64}"
 
 TEMPLATE = r"""<!DOCTYPE html>
 <html lang="zh-CN">
@@ -25,39 +42,50 @@ TEMPLATE = r"""<!DOCTYPE html>
   body{font-family:-apple-system,"SF Pro Text","Hiragino Sans","Noto Sans SC",sans-serif;
     background:var(--bg); color:var(--text); line-height:1.7; padding:24px 20px 60px; max-width:1000px; margin:auto;}
   a{color:var(--blue);text-decoration:none}
-  /* Hero */
-  .hero{text-align:center; padding:46px 20px 24px;}
-  .hero .emoji{font-size:54px; display:block; margin-bottom:10px;}
-  .hero h1{font-size:30px; letter-spacing:.5px;}
-  .hero .subtitle{font-size:15px; color:var(--muted); margin-top:8px;}
-  .count{display:inline-block; margin-top:14px; font-size:12px; color:var(--muted);
-    background:var(--card); border:1px solid var(--border); border-radius:999px; padding:5px 16px;}
+  /* Hero with full-bleed background image */
+  .hero{
+    position:relative; text-align:center; padding:80px 20px 50px;
+    color:#fff; overflow:hidden; border-radius:var(--radius);
+    background:url('__HERO_BG__') center center/cover no-repeat;
+  }
+  .hero::before{
+    content:''; position:absolute; inset:0;
+    background:linear-gradient(180deg,rgba(0,0,0,.45),rgba(0,0,0,.65));
+    z-index:0;
+  }
+  .hero > *{ position:relative; z-index:1; }
+  .hero h1{ font-size:34px; letter-spacing:.5px; text-shadow:0 2px 12px rgba(0,0,0,.4); }
+  .hero .subtitle{ font-size:16px; color:rgba(255,255,255,.88); margin-top:10px; text-shadow:0 1px 8px rgba(0,0,0,.35); }
+  .count{ display:inline-block; margin-top:18px; font-size:13px; color:rgba(255,255,255,.85);
+    background:rgba(255,255,255,.15); border:1px solid rgba(255,255,255,.25);
+    border-radius:999px; padding:6px 18px; backdrop-filter:blur(4px); -webkit-backdrop-filter:blur(4px); }
+
   /* Year group */
-  .year{font-size:22px; font-weight:700; margin:36px 0 4px; padding-left:8px;
-    border-left:4px solid var(--accent);}
+  .year{ font-size:22px; font-weight:700; margin:36px 0 4px; padding-left:8px;
+    border-left:4px solid var(--accent); }
+
   /* Grid */
-  .grid{display:grid; grid-template-columns:repeat(auto-fill,minmax(280px,1fr)); gap:20px; margin-top:18px;}
-  .trip-card{background:var(--card); border:1px solid var(--border); border-radius:var(--radius);
+  .grid{ display:grid; grid-template-columns:repeat(auto-fill,minmax(280px,1fr)); gap:20px; margin-top:18px;}
+  .trip-card{ background:var(--card); border:1px solid var(--border); border-radius:var(--radius);
     box-shadow:var(--shadow); overflow:hidden; display:flex; flex-direction:column;
     transition:transform .15s ease, box-shadow .15s ease;}
-  .trip-card:hover{transform:translateY(-4px); box-shadow:0 8px 24px rgba(0,0,0,.13);}
-  .cover{height:120px; display:flex; align-items:center; justify-content:center;
+  .trip-card:hover{ transform:translateY(-4px); box-shadow:0 8px 24px rgba(0,0,0,.13);}
+  .cover{ height:120px; display:flex; align-items:center; justify-content:center;
     background:linear-gradient(135deg,#c0392b,#e67e22); font-size:54px;}
-  .body{padding:16px 18px 20px; display:flex; flex-direction:column; flex:1;}
-  .body h2{font-size:18px; font-weight:700;}
-  .meta{font-size:12.5px; color:var(--muted); margin-top:4px;}
-  .place{font-size:12.5px; color:var(--muted); margin-top:2px;}
-  .blurb{font-size:13px; color:#444; margin-top:10px; flex:1;}
-  .tags{margin-top:12px; display:flex; gap:6px; flex-wrap:wrap;}
-  .tag{font-size:11px; padding:2px 10px; border-radius:99px; background:#f0f0f0; color:#555;}
-  .more{margin-top:14px; font-size:13px; font-weight:600; color:var(--accent);}
-  .empty{text-align:center; color:var(--muted); padding:60px 0; font-size:15px;}
+  .body{ padding:16px 18px 20px; display:flex; flex-direction:column; flex:1;}
+  .body h2{ font-size:18px; font-weight:700;}
+  .meta{ font-size:12.5px; color:var(--muted); margin-top:4px;}
+  .place{ font-size:12.5px; color:var(--muted); margin-top:2px;}
+  .blurb{ font-size:13px; color:#444; margin-top:10px; flex:1;}
+  .tags{ margin-top:12px; display:flex; gap:6px; flex-wrap:wrap;}
+  .tag{ font-size:11px; padding:2px 10px; border-radius:99px; background:#f0f0f0; color:#555;}
+  .more{ margin-top:14px; font-size:13px; font-weight:600; color:var(--accent);}
+  .empty{ text-align:center; color:var(--muted); padding:60px 0; font-size:15px;}
 </style>
 </head>
 <body>
 
 <div class="hero">
-  <span class="emoji">__SITE_EMOJI__</span>
   <h1>__SITE_TITLE__</h1>
   <div class="subtitle">__SITE_SUBTITLE__</div>
   <div class="count" id="count"></div>
@@ -92,7 +120,6 @@ TEMPLATE = r"""<!DOCTYPE html>
   if (!data.trips.length) {
     content.innerHTML = '<div class="empty">还没有行程，去添加第一段旅程吧 ✈️</div>';
   } else {
-    // 按年分组（优先用 t.year，否则从 dates 里解析 4 位年份），年份降序
     const years = {};
     data.trips.forEach(t => {
       const y = t.year || (t.dates && (t.dates.match(/\d{4}/) || [])[0]) || '未知';
@@ -116,9 +143,9 @@ TEMPLATE = r"""<!DOCTYPE html>
 
 html = (TEMPLATE
         .replace("__SITE_TITLE__", data["site"]["title"])
-        .replace("__SITE_EMOJI__", data["site"]["emoji"])
         .replace("__SITE_SUBTITLE__", data["site"]["subtitle"])
+        .replace("__HERO_BG__", data_uri)
         .replace("__TRIPS_JSON__", trips_json))
 
 (ROOT / "index.html").write_text(html, encoding="utf-8")
-print("OK: 已生成 index.html，共", len(data["trips"]), "段旅程")
+print(f"OK: 已生成 index.html（含 hero 背景图 {len(b64)} 字符），共 {len(data['trips'])} 段旅程")
