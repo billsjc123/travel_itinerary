@@ -13,7 +13,7 @@
     --shadow: 0 2px 12px rgba(0,0,0,.08); --radius: 14px;
   }
   * { margin:0; padding:0; box-sizing:border-box; }
-  body { font-family: -apple-system,"SF Pro Text","Hiragino Sans","Noto Sans SC",sans-serif; background:var(--bg); color:var(--text); line-height:1.7; padding:20px; max-width:1400px; margin:auto; }
+  body { font-family: -apple-system,"SF Pro Text","Hiragino Sans","Noto Sans SC",sans-serif; background:var(--bg); color:var(--text); line-height:1.7; padding:20px; max-width:900px; margin:auto; }
 
   /* Header */
   .hero { text-align:center; padding:40px 20px 30px; }
@@ -22,11 +22,11 @@
   .hero .emoji { font-size:48px; display:block; margin-bottom:10px; }
 
   /* Overview */
-  .overview { display:flex; gap:10px; justify-content:center; flex-wrap:wrap; margin:24px auto; max-width:1280px; }
+  .overview { display:flex; gap:10px; justify-content:center; flex-wrap:wrap; margin:24px auto; max-width:720px; }
   .ovw-chip { background:var(--card); border:1px solid var(--border); border-radius:999px; padding:8px 18px; font-size:13px; font-weight:500; }
 
   /* Day card */
-  .day { background:var(--card); border-radius:var(--radius); box-shadow:var(--shadow); margin:0; overflow:hidden; border-left:4px solid var(--accent); }
+  .day { background:var(--card); border-radius:var(--radius); box-shadow:var(--shadow); margin:16px 0; overflow:hidden; border-left:4px solid var(--accent); }
   .day-header { padding:18px 22px 12px; border-bottom:1px solid var(--f0f0f0,#eee); }
   .day-header .date { font-weight:700; font-size:17px; }
   .day-header .dow { font-size:13px; color:var(--muted); margin-left:8px; }
@@ -62,6 +62,8 @@
   .tt td { padding:5px 10px; border-bottom:1px solid #eee; }
   .tt tr:hover td { background:#fafafa; }
   .tt .highlight { background:#fff8e1; font-weight:600; }
+  .src-note { font-size:12px; color:#777; margin:6px 0 2px; }
+  .src-note a { color:var(--blue); }
 
   /* Section title */
   .sect { font-size:15px; font-weight:700; margin:18px 0 8px; padding-bottom:4px; border-bottom:2px solid #eee; display:flex; align-items:center; gap:8px; }
@@ -76,21 +78,15 @@
   footer { text-align:center; padding:30px 0 20px; font-size:12px; color:var(--muted); }
   a { color:var(--blue); text-decoration:none; } a:hover{text-decoration:underline}
 
-  /* 横向按天布局 */
-  .days-grid{ display:grid; grid-template-columns:repeat(auto-fit,minmax(270px,1fr)); gap:16px; margin:18px 0; align-items:start; }
-  .day-wide{ grid-column:1 / -1; }
   @media print {
-    body{padding:0;background:#fff}
-    .days-grid{ display:block; }
-    .day{ box-shadow:none; border:1px solid #ddd; margin:16px 0; }
-    .callout-warn{ background:#fffbe6; }
+    body{padding:0;background:#fff} .day{box-shadow:none;border:1px solid #ddd} .callout-warn{background:#fffbe6}
   }
 </style>
 </head>
 <body>
 
 <!-- ===== BACK TO INDEX ===== -->
-<div style="max-width:1400px;margin:0 auto;padding:14px 20px 0;">
+<div style="max-width:900px;margin:0 auto;padding:14px 20px 0;">
   <a href="index.html" style="font-size:13px;color:var(--blue);text-decoration:none;">← 返回所有行程</a>
 </div>
 
@@ -111,7 +107,6 @@
 </div>
 
 <!-- ═══════════════ DAY 0 ═══════════════ -->
-<div class="days-grid">
 <div class="day" style="border-left-color:var(--purple)">
   <div class="day-header">
     <span class="date">Day 0 · 7月23日（周四）</span><span class="dow"></span>
@@ -322,17 +317,33 @@
     </div>
 
     <div class="item"><div class="dot transit"></div>
-      <span class="time-badge">09:00 – 10:30</span>
+      <span class="time-badge">09:00 – 09:50</span>
       <span class="item-title">河口湖站 → 御殿場站（普通路線巴士 A1 · 直接到登山巴士站）</span>
       <div class="item-detail">
-        <span class="tb-bus">🚌 富士急 Mobility 河口湖线【A1】</span>：忍野八海经由 → 御殿場駅<br>
+        <span class="tb-bus">🚌 富士急 Mobility 河口湖線【A1】</span>：忍野八海经由 → 御殿場駅<br>
         📍 上车点：河口湖駅巴士站；目的地认准<strong>「御殿場駅」</strong>，不要坐到奥莱<br>
-        ⏱️ 当前公开时刻：<strong>09:00 发 → 10:30 抵御殿場駅</strong>（约90分钟）<br>
-        💴 票价参考约 <strong>¥1,750</strong>；普通路線巴士，无需座位预约<br>
-        🎯 比先坐 G-Liner 到奥莱再转车更稳：到御殿場駅后有约 70 分钟缓冲，可从容赶 11:40 登山巴士。
+        ⏱️ 车程 <strong>约 50 分钟</strong>（后门上车、下车时缴费，可用 Suica / PASMO 等 IC 卡）<br>
+        💴 票价 <strong>成人 ¥1,750 / 儿童 ¥880</strong>；普通路線巴士，无需座位预约<br>
+        🎯 到御殿場駅后约有 <strong>110 分钟</strong> 缓冲，从容办寄存 / 补给 / 入山手续，再赶 11:40 登山巴士。
+
+        <table class="tt" style="margin-top:10px">
+          <tr><th colspan="2">📋 河口湖駅 → 御殿場駅（富士急 Mobility 路線バス · 2026 夏季）</th></tr>
+          <tr><th>河口湖駅発</th><th>御殿場駅着（约 50 分）</th></tr>
+          <tr><td>07:00 / 07:30(A2)</td><td>~07:50 / ~08:20</td></tr>
+          <tr><td>08:00</td><td>~08:50</td></tr>
+          <tr class="highlight"><td><strong>09:00</strong></td><td><strong>~09:50 ✅ 主用</strong></td></tr>
+          <tr class="highlight"><td><strong>10:00</strong></td><td><strong>~10:50 ✅ 备选</strong></td></tr>
+          <tr><td>11:00 / 11:30</td><td>~11:50 / ~12:20</td></tr>
+          <tr><td>13:00</td><td>~13:50</td></tr>
+          <tr><td>14:00 / 14:20</td><td>~14:50 / ~15:10</td></tr>
+          <tr><td>15:00 / 15:20</td><td>~15:50 / ~16:10</td></tr>
+          <tr><td>16:00 / 16:20</td><td>~16:50 / ~17:10</td></tr>
+          <tr><td>17:00(A2) / 17:30</td><td>~17:50 / ~18:20</td></tr>
+        </table>
+        <div class="src-note">🔗 数据来源：<a href="https://www.fujikyumobility.com/rosen/index.html" target="_blank">富士急 Mobility 御殿場地区路線バス时刻表（官方）</a></div>
 
         <div class="callout callout-info">
-          ✅ <strong>这是本次优化后的主方案：</strong>登山日不经过奥莱。请在出发前一周再用富士急官方时刻表/NAVITIME 按 7/25 日期复核 A1 班次；如因临时调度取消，则打车至御殿場駅或改按 13:00 登山巴士保底。
+          ✅ <strong>这是本次优化后的主方案：</strong>登山日不经过奥莱。请在出发前一周再用富士急官方时刻表 / NAVITIME 按 7/25 日期复核 A1 班次；如因临时调度取消，则打车至御殿場駅或改按 12:40 登山巴士保底。
         </div>
       </div>
     </div>
@@ -364,25 +375,27 @@
         ⏱️ 车程约 <strong>55–60 分钟</strong>（山路弯多）<br>
         💴 票价：<strong>单程 ¥1,780 / 往返 ¥2,500</strong>（儿童半价）<br>
         🎫 <strong>无需预约</strong>，排队上车，车上支付现金或 IC 卡<br>
-        📅 运营期：<strong>2026年7月1日 – 9月10日（每日运营）</strong><br>
-        🎯 到达五合目：11:40 班约 12:40 抵达；13:00 班约 14:00 抵达
+        📅 运营期：<strong>2026年7月1日（周三）– 9月11日（周五）每日运营</strong>（9/11 仅下山班次）<br>
+        🎯 到达五合目：11:40 班约 12:40 抵达；12:40 班约 13:40 抵达
 
         <table class="tt" style="margin-top:10px">
-          <tr><th colspan="3">📋 【Q】御殿場駅 → 須走口五合目 登山巴士 时刻表 (7/1-9/10 每日)</th></tr>
-          <tr><th>御殿場駅発</th><th>須走口五合目着</th><th>备注</th></tr>
+          <tr><th colspan="3">📋 【Q】御殿場駅 → 須走口五合目 登山巴士 时刻表 (2026/7/1–9/11 每日)</th></tr>
+          <tr><th>御殿場駅発</th><th>須走口五合目着（约 1 小时）</th><th>备注</th></tr>
           <tr><td>06:45</td><td>07:45</td><td>最早</td></tr>
           <tr><td>07:45</td><td>08:45</td><td></td></tr>
-          <tr><td>8:40</td><td>9:40</td><td></td></tr>
-          <tr><td>9:40</td><td>10:40</td><td></td></tr>
-          <tr class="highlight"><td><strong>10:40</strong></td><td><strong>11:40</strong></td><td>✅ 可选</td></tr>
+          <tr><td>08:40</td><td>09:40</td><td></td></tr>
+          <tr><td>09:40</td><td>10:40</td><td></td></tr>
+          <tr class="highlight"><td><strong>10:40</strong></td><td><strong>11:40</strong></td><td>✅ 可选：寄包后轻松赶</td></tr>
           <tr class="highlight"><td><strong>11:40</strong></td><td><strong>12:40</strong></td><td>✅ 主用：站旁寄包后仍有缓冲</td></tr>
-          <tr class="highlight"><td><strong>13:00</strong></td><td><strong>14:00</strong></td><td>✅ 稳妥兜底；上山会偏晚</td></tr>
-          <tr><td>13:55</td><td>14:55</td><td>⚠️ 不建议，抵达山屋会太晚</td></tr>
+          <tr class="highlight"><td><strong>12:40</strong></td><td><strong>13:40</strong></td><td>✅ 稳妥兜底；上山偏晚</td></tr>
+          <tr><td>13:55</td><td>14:55</td><td>⚠️ 不建议，抵达山屋太晚</td></tr>
+          <tr><td>14:55</td><td>15:55</td><td>⚠️ 过晚</td></tr>
           <tr class="highlight"><td><strong>15:30</strong></td><td><strong>16:30</strong></td><td>⚠️ 最末日常班车</td></tr>
         </table>
+        <div class="src-note">🔗 数据来源：<a href="https://www.fujikyumobility.com/news/copy_of_2024.08.15.html" target="_blank">富士急 Mobility 登山巴士 Q-line 官方公告（御殿場駅↔須走口五合目，含 PDF 时刻表）</a> ・ <a href="https://www.fujikyumobility.com/rosen/season.html" target="_blank">季节 / 临时班次总页</a></div>
 
         <div class="callout callout-warn">
-          ⚠️ <strong>时间控制：</strong>A1 09:00 预计 10:30 到御殿場駅，寄存点距车站约 1 分钟，主用 11:40 班有约 70 分钟处理寄包/补给/入山手续。若 A1 道路延误或寄存点临时满位，立即放弃 11:40，改按 13:00 上山；15:30 不适合本行程。
+          ⚠️ <strong>时间控制：</strong>A1 09:00 预计约 09:50 到御殿場駅，寄存点距车站约 1 分钟，主用 11:40 班有约 110 分钟处理寄包/补给/入山手续。若 A1 道路延误或寄存点临时满位，立即放弃 11:40，改按 12:40 上山；15:30 为最末班，不适合本行程。
         </div>
       </div>
     </div>
@@ -495,7 +508,7 @@
         ⏱️ 车程约 <strong>60 分钟</strong><br>
         💴 票价：<strong>单程 ¥1,780 / 往返 ¥2,500</strong>（去程已买往返票则直接用回程）<br>
         🎫 无需预约，排队上车<br>
-        📅 夏季运营期：7/1 – 9/10（每日）
+        📅 夏季运营期：2026/7/1 – 9/11（每日；末班 20:00 発）
 
         <table class="tt" style="margin-top:8px">
           <tr><th colspan="2">📋 【Q】須走口五合目 → 御殿場駅 下山巴士 时刻表 (7/1-9/10 每日)</th></tr>
@@ -508,6 +521,7 @@
           <tr><td>13:00 / 14:30 / 15:30</td><td>…</td></tr>
           <tr><td>17:00 / 18:00 / 19:00 / 20:00</td><td>末班 20:00 発</td></tr>
         </table>
+        <div class="src-note">🔗 数据来源：<a href="https://www.fujikyumobility.com/news/copy_of_2024.08.15.html" target="_blank">富士急 Mobility 登山巴士 Q-line 官方公告（含 PDF 时刻表）</a></div>
         <div class="callout callout-info">
           ℹ️ 下山方向班次较多（一直到 20:00）。按 09:00–10:00 下到五合目，通常可接 09:55 或 10:55；若腿部疲劳，改搭 11:55 也仍有余量。
         </div>
@@ -610,7 +624,7 @@
 </div>
 
 <!-- ═════ NOTES ═════ -->
-<div class="day day-wide" style="border-left-color:var(--muted,#888)">
+<div class="day" style="border-left-color:var(--muted,#888)">
   <div class="day-header">
     <span class="date">📋 实用备忘</span>
   </div>
@@ -634,7 +648,9 @@
 
     <div class="sect"><span class="icon">📱</span>实用链接</div>
     <div class="item-detail">
-      • <a href="https://www.fujikyumobility.com/news/copy_of_202206082.html" target="_blank">富士急 Mobility 登山巴士官方页面（御殿场↔五合目）</a><br>
+      • <a href="https://www.fujikyumobility.com/news/copy_of_2024.08.15.html" target="_blank">富士急 Mobility 登山巴士 Q-line 官方公告（御殿場駅↔須走口五合目，含 PDF 时刻表）</a><br>
+      • <a href="https://www.fujikyumobility.com/rosen/season.html" target="_blank">富士急 Mobility 季节 / 临时班次总页（登山巴士专区）</a><br>
+      • <a href="https://www.fujikyumobility.com/rosen/index.html" target="_blank">富士急 Mobility 御殿場地区路線バス时刻表（河口湖→御殿場駅）</a><br>
       • <a href="https://www.yamatan.net/hut/munatsukiedoya/plan?year=2026&month=07" target="_blank">上江戸屋（本八合目 胸突江戸屋）预约页</a><br>
       • <a href="https://fhr.fujiview.jp/directions/index.html?stt_lang=zh-TW" target="_blank">Fuji View Hotel 交通与接驳巴士</a><br>
       • <a href="https://www.jrbuskanto.co.jp/jwp/topics/20260601outlet.html" target="_blank">JRバス関東：东京/新宿～御殿場 Premium Outlets 线改正通知</a><br>
@@ -672,7 +688,6 @@
     </ul>
 
   </div>
-</div>
 </div>
 
 <footer>
