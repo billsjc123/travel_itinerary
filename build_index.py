@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 # 读取 trips.json，生成自包含的 index.html（数据内联，本地/Pages 均可）。
+# 主页按「年」分组展示所有行程。
 # 用法：python3 build_index.py
 import json, pathlib
 
@@ -25,14 +26,17 @@ TEMPLATE = r"""<!DOCTYPE html>
     background:var(--bg); color:var(--text); line-height:1.7; padding:24px 20px 60px; max-width:1000px; margin:auto;}
   a{color:var(--blue);text-decoration:none}
   /* Hero */
-  .hero{text-align:center; padding:46px 20px 30px;}
+  .hero{text-align:center; padding:46px 20px 24px;}
   .hero .emoji{font-size:54px; display:block; margin-bottom:10px;}
   .hero h1{font-size:30px; letter-spacing:.5px;}
   .hero .subtitle{font-size:15px; color:var(--muted); margin-top:8px;}
   .count{display:inline-block; margin-top:14px; font-size:12px; color:var(--muted);
     background:var(--card); border:1px solid var(--border); border-radius:999px; padding:5px 16px;}
+  /* Year group */
+  .year{font-size:22px; font-weight:700; margin:36px 0 4px; padding-left:8px;
+    border-left:4px solid var(--accent);}
   /* Grid */
-  .grid{display:grid; grid-template-columns:repeat(auto-fill,minmax(280px,1fr)); gap:20px; margin-top:28px;}
+  .grid{display:grid; grid-template-columns:repeat(auto-fill,minmax(280px,1fr)); gap:20px; margin-top:18px;}
   .trip-card{background:var(--card); border:1px solid var(--border); border-radius:var(--radius);
     box-shadow:var(--shadow); overflow:hidden; display:flex; flex-direction:column;
     transition:transform .15s ease, box-shadow .15s ease;}
@@ -47,7 +51,6 @@ TEMPLATE = r"""<!DOCTYPE html>
   .tags{margin-top:12px; display:flex; gap:6px; flex-wrap:wrap;}
   .tag{font-size:11px; padding:2px 10px; border-radius:99px; background:#f0f0f0; color:#555;}
   .more{margin-top:14px; font-size:13px; font-weight:600; color:var(--accent);}
-  footer{text-align:center; padding:36px 0 10px; font-size:12px; color:var(--muted);}
   .empty{text-align:center; color:var(--muted); padding:60px 0; font-size:15px;}
 </style>
 </head>
@@ -60,19 +63,15 @@ TEMPLATE = r"""<!DOCTYPE html>
   <div class="count" id="count"></div>
 </div>
 
-<div class="grid" id="grid"></div>
-
-<footer>由 build_index.py 自动生成 · 编辑 trips.json 后重新运行即可更新</footer>
+<div id="content"></div>
 
 <script type="application/json" id="trips-data">__TRIPS_JSON__</script>
 <script>
   const data = JSON.parse(document.getElementById('trips-data').textContent);
-  const grid = document.getElementById('grid');
+  const content = document.getElementById('content');
   document.getElementById('count').textContent = '共 ' + data.trips.length + ' 段旅程';
-  if (!data.trips.length) {
-    grid.innerHTML = '<div class="empty">还没有行程，去添加第一段旅程吧 ✈️</div>';
-  }
-  data.trips.forEach(t => {
+
+  function makeCard(t){
     const tags = (t.tags || []).map(x => '<span class="tag">'+x+'</span>').join('');
     const card = document.createElement('a');
     card.className = 'trip-card';
@@ -81,14 +80,35 @@ TEMPLATE = r"""<!DOCTYPE html>
       '<div class="cover">'+(t.emoji||'🧳')+'</div>'+
       '<div class="body">'+
         '<h2>'+(t.title||t.file)+'</h2>'+
-        '<div class="meta">📅 '+(t.dates||'')+'　·　🕓 更新 '+(t.updated||'')+'</div>'+
+        '<div class="meta">📅 '+(t.dates||'')+'　·　🕒 更新 '+(t.updated||'')+'</div>'+
         '<div class="place">📍 '+(t.place||'')+'</div>'+
         '<div class="blurb">'+(t.blurb||'')+'</div>'+
         '<div class="tags">'+tags+'</div>'+
         '<div class="more">查看详情 →</div>'+
       '</div>';
-    grid.appendChild(card);
-  });
+    return card;
+  }
+
+  if (!data.trips.length) {
+    content.innerHTML = '<div class="empty">还没有行程，去添加第一段旅程吧 ✈️</div>';
+  } else {
+    // 按年分组（优先用 t.year，否则从 dates 里解析 4 位年份），年份降序
+    const years = {};
+    data.trips.forEach(t => {
+      const y = t.year || (t.dates && (t.dates.match(/\d{4}/) || [])[0]) || '未知';
+      (years[y] = years[y] || []).push(t);
+    });
+    Object.keys(years).sort().reverse().forEach(y => {
+      const h = document.createElement('div');
+      h.className = 'year';
+      h.textContent = y + ' 年';
+      content.appendChild(h);
+      const grid = document.createElement('div');
+      grid.className = 'grid';
+      years[y].forEach(t => grid.appendChild(makeCard(t)));
+      content.appendChild(grid);
+    });
+  }
 </script>
 </body>
 </html>
