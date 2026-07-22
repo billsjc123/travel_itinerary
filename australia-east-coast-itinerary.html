@@ -1,0 +1,445 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>🇦🇺 澳大利亚东岸国庆游 · 行程文档 (9.28-10.13)</title>
+<style>
+  :root {
+    --bg: #fafafa; --card: #fff; --border: #e0e0e0;
+    --text: #2c2c2c; --muted: #666; --accent: #2980b9;
+    --blue: #2980b9; --green: #27ae60; --orange: #e67e22;
+    --purple: #8e44ad; --red: #e74c3c; --warn-bg: #fff3cd; --warn-border: #ffc107;
+    --shadow: 0 2px 12px rgba(0,0,0,.08); --radius: 14px;
+  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { font-family: -apple-system,"SF Pro Text","Hiragino Sans","Noto Sans SC",sans-serif; background:var(--bg); color:var(--text); line-height:1.7; padding:20px; max-width:900px; margin:auto; }
+
+  /* Header */
+  .hero { text-align:center; padding:40px 20px 30px; }
+  .hero h1 { font-size:28px; letter-spacing:.5px; }
+  .hero .subtitle { font-size:15px; color:var(--muted); margin-top:6px; }
+  .hero .emoji { font-size:48px; display:block; margin-bottom:10px; }
+
+  /* Overview */
+  .overview { display:flex; gap:10px; justify-content:center; flex-wrap:wrap; margin:24px auto; max-width:720px; }
+  .ovw-chip { background:var(--card); border:1px solid var(--border); border-radius:999px; padding:8px 18px; font-size:13px; font-weight:500; }
+
+  /* Day card */
+  .day { background:var(--card); border-radius:var(--radius); box-shadow:var(--shadow); margin:16px 0; overflow:hidden; border-left:4px solid var(--accent); }
+  .day-header { padding:18px 22px 12px; border-bottom:1px solid #eee; }
+  .day-header .date { font-weight:700; font-size:17px; }
+  .day-header .dow { font-size:13px; color:var(--muted); margin-left:8px; }
+  .day-header .tag { display:inline-block; font-size:11px; padding:2px 10px; border-radius:99px; color:#fff; margin-left:10px; vertical-align:middle; }
+  .tag-flight{background:var(--purple)} .tag-hotel{background:var(--blue)} .tag-hike{background:var(--green)} .tag-transit{background:var(--orange)} .tag-return{background:var(--red)}
+  .tag-drive{background:var(--orange)} .tag-scenic{background:var(--green)}
+
+  .day-body { padding:16px 22px 22px; }
+
+  /* Timeline item */
+  .item { position:relative; padding-left:26px; margin:16px 0; }
+  .item::before { content:''; position:absolute; left:6px; top:4px; bottom:-4px; width:2px; background:#ddd; }
+  .item:last-child::before { display:none; }
+  .dot { position:absolute; left:2px; top:6px; width:12px; height:12px; border-radius:50%; border:2px solid var(--blue); background:#fff; z-index:1; }
+  .dot.flight{border-color:var(--purple);background:#f3e5f5} .dot.hotel{border-color:var(--blue);background:#e3f2fd}
+  .dot.hike{border-color:var(--green);background:#e8f5e9} .dot.transit{border-color:var(--orange);background:#fff3e0}
+  .dot.return{border-color:var(--red);background:#ffebee} .dot.alert{border-color:var(--red);background:var(--red)}
+  .dot.food{border-color:var(--orange);background:#fff3e0} .dot.sight{border-color:var(--green);background:#e8f5e9}
+  .dot.drive{border-color:var(--orange);background:#fff3e0}
+
+  .time-badge { display:inline-block; font-size:12px; font-weight:600; padding:2px 8px; border-radius:6px; background:#eee; color:var(--muted); margin-right:6px; }
+  .item-title { font-weight:600; font-size:15px; }
+  .item-desc { font-size:13.5px; color:var(--muted); margin-top:4px; }
+  .item-desc strong { color:var(--text); }
+  .item-detail { font-size:13px; margin-top:6px; padding:8px 12px; background:#f7f7f7; border-radius:8px; line-height:1.65; }
+
+  /* Warning / callout */
+  .callout { border-radius:10px; padding:14px 18px; margin:14px 0; font-size:13.5px; line-height:1.65; }
+  .callout-warn { background:var(--warn-bg); border:1px solid var(--warn-border); color:#856404; }
+  .callout-info { background:#e8f4fd; border:1px solid #a8d1f0; color:#0c5460; }
+
+  /* Transport badge */
+  .tbadge { display:inline-block; font-size:11px; padding:2px 8px; border-radius:4px; font-weight:500; color:#fff; margin-right:4px; }
+  .tb-bus{background:var(--green)} .tb-train{background:var(--blue)} .tb-shuttle{background:var(--orange)} .tb-walk{background:var(--purple)}
+  .tb-plane{background:var(--purple)} .tb-taxi{background:var(--muted,#888)}
+
+  /* Inline images */
+  .inline-img { width:100%; border-radius:10px; margin:12px 0; display:block; }
+  .img-caption { font-size:12px; color:var(--muted); text-align:center; margin-top:-8px; margin-bottom:8px; }
+
+  footer { text-align:center; padding:30px 0 20px; font-size:12px; color:var(--muted); }
+  a { color:var(--blue); text-decoration:none; } a:hover{text-decoration:underline}
+
+  @media print {
+    body{padding:0;background:#fff} .day{box-shadow:none;border:1px solid #ddd} .callout-warn{background:#fffbe6}
+  }
+</style>
+</head>
+<body>
+
+<!-- ===== BACK TO INDEX ===== -->
+<div style="max-width:900px;margin:0 auto;padding:14px 20px 0;">
+<a href="index.html" style="font-size:13px;color:var(--muted);">← 返回旅行集主页</a>
+</div>
+
+<!-- ===== HERO ===== -->
+<div class="hero">
+  <div class="emoji">🇦🇺</div>
+  <h1>澳大利亚东岸国庆游</h1>
+  <div class="subtitle">Australia East Coast · 国庆假期 · 悉尼 × 墨尔本 × 大洋路</div>
+</div>
+
+<!-- ===== OVERVIEW CHIPS ===== -->
+<div class="overview">
+  <span class="ovw-chip">📅 2025.09.28 – 10.13（15 天）</span>
+  <span class="ovw-chip">✈️ 香港 → 悉尼 → 墨尔本 → 离开</span>
+  <span class="ovw-chip">🚗 大洋路自驾 2 日</span>
+  <span class="ovw-chip">🏃‍♂️ George Bass Coastal Walk</span>
+</div>
+
+<!-- ============================================================ -->
+<!-- DAY 0 · 出发 -->
+<!-- ============================================================ -->
+<div class="day">
+  <div class="day-header">
+    <span class="date">Day 0 · 9月28日（日）</span>
+    <span class="dow">出发日</span>
+    <span class="tag tag-flight">✈️ 飞行</span>
+  </div>
+  <div class="day-body">
+    <div class="item"><div class="dot flight"></div>
+      <span class="time-badge">全天</span>
+      <span class="item-title">香港 → 新加坡 → 悉尼</span>
+      <div class="item-desc"><span class="tbadge tb-plane">✈️ 国际航班</span>经新加坡樟宜机场转机前往悉尼金斯福德·史密斯机场（SYD）</div>
+      <div class="item-detail">
+        📍 航线：HKG → SIN → SYD（经停新加坡）<br>
+        ⏱️ 全程约 12–14 小时含转机<br>
+        💡 建议：提前办理澳洲 ETA 电子签证；新加坡转机可利用樟宜免税店购物
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ============================================================ -->
+<!-- DAY 1 · 抵达悉尼 -->
+<!-- ============================================================ -->
+<div class="day">
+  <div class="day-header">
+    <span class="date">Day 1 · 9月29日（一）</span>
+    <span class="dow">抵达悉尼</span>
+    <span class="tag tag-hotel">🏨 入住</span>
+  </div>
+  <div class="day-body">
+    <div class="item"><div class="dot flight"></div>
+      <span class="time-badge">上午</span>
+      <span class="item-title">🛬 抵达悉尼</span>
+      <div class="item-desc"><span class="tbadge tb-plane">✈️ 到港</span>抵达悉尼金斯福德·史密斯机场（SYD），入境、取行李</div>
+      <div class="item-detail">
+        📍 悉尼机场 → 市区：Airport Link 火车约 15 分钟到 Central / Town Hall<br>
+        🎫 Opal Card：可在机场便利店购买，市区公共交通通用<br>
+        🏨 入住酒店/民宿，休整时差
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ============================================================ -->
+<!-- DAY 2 · 悉尼 Citywalk + 海港活动 -->
+<!-- ============================================================ -->
+<div class="day">
+  <div class="day-header">
+    <span class="date">Day 2 · 9月30日（二）</span>
+    <span class="dow">悉尼探索</span>
+    <span class="tag tag-scenic">🌊 海滨</span>
+  </div>
+  <div class="day-body">
+    <div class="item"><div class="dot sight"></div>
+      <span class="time-badge">早晨</span>
+      <span class="item-title">海港大桥日出桨板</span>
+      <div class="item-desc"><span class="tbadge tb-walk">🚶 水上活动</span>在悉尼海港大桥下划桨板（SUP），日出时分海港景色绝佳</div>
+      <div class="item-detail">
+        📍 出发点：Cockatoo Island 或 Lavender Bay 附近水域<br>
+        🌅 最佳时间：日出前后（约 05:30–07:00，视季节）<br>
+        📌 需提前预约向导或租借桨板装备
+      </div>
+    </div>
+
+    <div class="item"><div class="dot sight"></div>
+      <span class="time-badge">上午</span>
+      <span class="item-title">🚶 Citywalk（悉尼市区漫步）</span>
+      <div class="item-desc"><span class="tbadge tb-walk">🚶 步行</span>悉尼市中心步行探索：岩石区、环形码头、歌剧院外观</div>
+      <div class="item-detail">
+        📍 路线建议：The Rocks → 环形码头（Circular Quay）→ 悉尼歌剧院 → Royal Botanic Garden<br>
+        ☕ 可在 The Rocks 区的咖啡馆吃早餐
+      </div>
+    </div>
+
+    <div class="item"><div class="dot sight"></div>
+      <span class="time-badge">下午</span>
+      <span class="item-title">Bondi to Coogee 海岸步道</span>
+      <div class="item-desc"><span class="tbadge tb-walk">🚶 徒步</span>悉尼经典海岸线徒步：邦迪海滩 → 塔玛拉玛 → 布朗特 → 库吉</div>
+      <div class="item-detail">
+        📏 距离：约 6 km，耗时 2–2.5 小时<br>
+        🌊 途经地标：Bondi Icebergs泳池、Gordons Bay、Wally's Cave<br>
+        🏁 终点 Coogee Beach 可在海边餐厅用餐后坐公交返回
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ============================================================ -->
+<!-- DAY 3 · 塔龙加动物园 -->
+<!-- ============================================================ -->
+<div class="day">
+  <div class="day-header">
+    <span class="date">Day 3 · 10月1日（三）</span>
+    <span class="dow">国庆节</span>
+    <span class="tag tag-scenic">🐨 动物园</span>
+  </div>
+  <div class="day-body">
+    <div class="item"><div class="dot sight"></div>
+      <span class="time-badge">全天</span>
+      <span class="item-title">塔龙加动物园（Taronga Zoo）</span>
+      <div class="item-desc"><span class="tbadge tb-shuttle">🚌 渡轮+缆车</span>悉尼必去——从环形码头乘渡轮过海，动物园在山上可俯瞰悉尼歌剧院和海港大桥全景</div>
+      <div class="item-detail">
+        📍 交通：Circular Quay Wharf 2/3 → Taronga Zoo Whiskeria（渡轮约 12 分钟），再乘缆车或步行上山<br>
+        🐨 重点：考拉、袋鼠、袋熊喂食表演、鸟类自由飞行秀<br>
+        🌅 推荐：傍晚时段入园，白天看动物 + 傍晚看悉尼夜景（Sky Safari 缆车）<br>
+        🎫 提前官网购票：<a href="https://taronga.org.au/taronga-zoo" target="_blank">taronga.org.au</a><br>
+        ⏱️ 建议游玩时间：4–6 小时
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ============================================================ -->
+<!-- DAY 4 · 飞墨尔本 -->
+<!-- ============================================================ -->
+<div class="day">
+  <div class="day-header">
+    <span class="date">Day 4 · 10月2日（四）</span>
+    <span class="dow">悉尼 → 墨尔本</span>
+    <span class="tag tag-flight">✈️ 转场</span>
+  </div>
+  <div class="day-body">
+    <div class="item"><div class="dot flight"></div>
+      <span class="time-badge">上午</span>
+      <span class="item-title">🛫 飞往墨尔本</span>
+      <div class="item-desc"><span class="tbadge tb-plane">✈️ 国内航班</span>悉尼（SYD）→ 墨尔本（MEL / AVV），航程约 1.5 小时</div>
+      <div class="item-detail">
+        ✈️ 航司选择：捷星航空（Jetstar）、维珍澳洲（Virgin Australia）、澳航（Qantas）<br>
+        📍 到达：墨尔本国际机场（Tullamarine, MEL）或阿瓦隆机场（Avalon, AVV）<br>
+        🚗 MEL → 市区：SkyBus 约 30 分钟 / 打车约 25 分钟
+      </div>
+    </div>
+
+    <div class="item"><div class="dot sight"></div>
+      <span class="time-badge">下午</span>
+      <span class="item-title">Citywalk（墨尔本市区）</span>
+      <div class="item-desc"><span class="tbadge tb-walk">🚶 步行</span>墨尔本 CBD 漫步：弗林德斯街车站、联邦广场、涂鸦巷（Hosier Lane）、亚拉河畔</div>
+      <div class="item-detail">
+        📍 推荐路线：Flinders St Station → Federation Square → Hosier Lane（涂鸦）→ Southbank Promenade → Eureka Tower 观景台<br>
+        ☕ 咖啡文化：墨尔本是全球咖啡之都，Degraves St / Centre Place 的巷弄咖啡馆不可错过
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ============================================================ -->
+<!-- DAY 5 · George Bass Coastal Walk -->
+<!-- ============================================================ -->
+<div class="day">
+  <div class="day-header">
+    <span class="date">Day 5 · 10月3日（五）</span>
+    <span class="dow">墨尔本周边徒步</span>
+    <span class="tag tag-hike">🥾 徒步</span>
+  </div>
+  <div class="day-body">
+    <div class="item"><div class="dot hike"></div>
+      <span class="time-badge">全天</span>
+      <span class="item-title">George Bass Coastal Walk</span>
+      <div class="item-desc"><span class="tbadge tb-walk">🥾 海岸徒步</span>墨尔本东南部经典海岸线徒步路线，悬崖、海湾、原始植被交替</div>
+      <div class="item-detail">
+        📍 起点：San Remo（菲利普岛附近）或 Kilcunda<br>
+        📏 全程：约 16–20 km（可分段走）<br>
+        ⏱️ 耗时：5–7 小时（视配速和停留）<br>
+        🌊 亮点：Bass Strait 海景、海蚀平台、野生考拉出没区、 historic fishing villages<br>
+        🎒 难度：中等——部分路段有陡峭台阶和沙地，需穿健行鞋<br>
+        🚌 交通：从墨尔本 Southern Cross Station 乘坐 V/Line 火车至 San Remo / Kilcunda（约 1.5–2 小时）
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ============================================================ -->
+<!-- DAY 6 · 蒸汽小火车 -->
+<!-- ============================================================ -->
+<div class="day">
+  <div class="day-header">
+    <span class="date">Day 6 · 10月4日（六）</span>
+    <span class="dow">蒸汽火车体验</span>
+    <span class="tag tag-transit">🚂 火车</span>
+  </div>
+  <div class="day-body">
+    <div class="item"><div class="dot transit"></div>
+      <span class="time-badge">上午</span>
+      <span class="item-title">普芬比利蒸汽小火车（Puffing Billy Railway）</span>
+      <div class="item-desc"><span class="tbadge tb-train">🚂 蒸汽火车</span>百年历史的蒸汽小火车，穿越丹德农山脉雨林，乘客可将脚伸出车窗外</div>
+      <div class="item-detail">
+        📍 出发站：Belgrave Station（从墨尔本 Belgrave Line 火车约 70 分钟）<br>
+        🛤️ 路线：Belgrave → Lakeside → Menzies Creek → Gembrook（往返）<br>
+        🕐 单程约 60 分钟，全程往返约 4–5 小时（含中途停留）<br>
+        🎫 官网：<a href="https://puffingbilly.com.au/" target="_blank">puffingbilly.com.au</a><br>
+        💡 经典体验：将脚伸出车窗（唯一允许的铁路！）；推荐在 Lakeside 下车野餐
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ============================================================ -->
+<!-- DAY 7-10 · 自由活动 / 中转 -->
+<!-- ============================================================ -->
+<div class="day">
+  <div class="day-header">
+    <span class="date">Day 7–10 · 10月5日–8日（日–三）</span>
+    <span class="dow">自由安排</span>
+  </div>
+  <div class="day-body">
+    <div class="item"><div class="dot sight"></div>
+      <span class="time-badge">—</span>
+      <span class="item-title">自由活动 / 休息调整</span>
+      <div class="item-desc">可根据兴趣安排：菲利普岛看企鹅归巢、大洋路前哨站探索、墨尔本博物馆/美术馆深度游、或纯休息调整体力为后续大洋路自驾做准备</div>
+    </div>
+  </div>
+</div>
+
+<!-- ============================================================ -->
+<!-- DAY 11 · 大洋路自驾 Day 1 -->
+<!-- ============================================================ -->
+<div class="day">
+  <div class="day-header">
+    <span class="date">Day 11 · 10月11日（六）</span>
+    <span class="dow">大洋路自驾 D1</span>
+    <span class="tag tag-drive">🚗 自驾</span>
+  </div>
+  <div class="day-body">
+    <div class="item"><div class="dot drive"></div>
+      <span class="time-badge">早晨</span>
+      <span class="item-title">取车出发：墨尔本 → 托基（Torquay）→ 洛恩（Lorne）</span>
+      <div class="item-desc"><span class="tbadge tb-taxi">🚗 自驾</span>大洋路（Great Ocean Road）正式起点，世界最美沿海公路之一</div>
+      <div class="item-detail">
+        🛣️ 路线：Melbourne → Geelong → Torquay（大洋路正式起点牌匾）→ Anglesea → Aireys Inlet（Fairhaven Beach）→ Split Point Lighthouse → Lorne<br>
+        📏 今日里程：约 120–150 km<br>
+        🌟 亮点：<br>
+        &nbsp;&nbsp;• Torquay —— 冲浪之都，Bells Beach（《极线杀手》取景地）<br>
+        &nbsp;&nbsp;• Memorial Arch at Eastern View —— 大洋路标志性拱门<br>
+        &nbsp;&nbsp;• Lorne —— 海滨小镇，入住首选地之一<br>
+        🏨 住宿建议：Lorne 或 Apollo Bay
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ============================================================ -->
+<!-- DAY 12 · 大洋路自驾 Day 2 -->
+<!-- ============================================================ -->
+<div class="day">
+  <div class="day-header">
+    <span class="date">Day 12 · 10月12日（日）</span>
+    <span class="dow">大洋路自驾 D2</span>
+    <span class="tag tag-drive">🚗 自驾</span>
+  </div>
+  <div class="day-body">
+    <div class="item"><div class="dot drive"></div>
+      <span class="time-badge">全天</span>
+      <span class="item-title">洛恩 → 十二门徒岩（Twelve Apostles）→ 坎贝尔港（Port Campbell）</span>
+      <div class="item-desc"><span class="tbadge tb-taxi">🚗 自驾</span>大洋路精华段：悬崖、拱门、十二使徒岩</div>
+      <div class="item-detail">
+        🛣️ 路线：Lorne → Apollo Bay（阿波罗湾午餐）→ Cape Otway Lighthouse（最南端灯塔）→ Gibson Steps → Twelve Apostles → Loch Ard Gorge → London Bridge → Port Campbell<br>
+        📏 今日里程：约 130–160 km<br>
+        🌟 亮点：<br>
+        &nbsp;&nbsp;• Apollo Bay —— 金色沙滩，海鲜餐厅<br>
+        &nbsp;&nbsp;• Cape Otway —— 考拉野生栖息地（路上留意树上的考拉！）<br>
+        &nbsp;&nbsp;• **Twelve Apostles** —— 标志性石灰岩柱，日落最佳<br>
+        &nbsp;&nbsp;• Loch Ard Gorge —— 1878 年沉船遗址，峡谷壮丽<br>
+        &nbsp;&nbsp;• London Bridge —— 曾经的双拱桥（1990 年坍塌）<br>
+        📸 摄影：十二门徒岩日落是重头戏（约 17:30–19:00）<br>
+        🏨 住宿建议：Port Campbell 或 返回 Apollo Bay
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ============================================================ -->
+<!-- DAY 13 · 返程 -->
+<!-- ============================================================ -->
+<div class="day">
+  <div class="day-header">
+    <span class="date">Day 13 · 10月13日（一）</span>
+    <span class="dow">返程日</span>
+    <span class="tag tag-return">✈️ 返程</span>
+  </div>
+  <div class="day-body">
+    <div class="item"><div class="dot return"></div>
+      <span class="time-badge">白天</span>
+      <span class="item-title">🛫 离开墨尔本</span>
+      <div class="item-desc"><span class="tbadge tb-plane">✈️ 返程航班</span>墨尔本（MEL）→ 转机 → 香港</div>
+      <div class="item-detail">
+        ✈️ 航班：MEL → HKG（可能经 SIN / SYD / BNE 转机）<br>
+        🚗 还车：机场还车柜台（各租车公司均在 MEL 机场有网点）<br>
+        ⏱️ 建议预留至少 2.5 小时到达机场（国际航班）
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ============================================================ -->
+<!-- 参考信息卡 -->
+<!-- ============================================================ -->
+<div class="day" style="border-left-color:var(--purple);">
+  <div class="day-header">
+    <span class="date">📋 实用参考信息</span>
+  </div>
+  <div class="day-body">
+
+    <div class="sect"><span class="icon">💰</span>签证与货币</div>
+    <div class="item-detail">
+      📝 签证：中国护照持有人申请 <strong>Australia ETA（电子旅行许可）</strong>，在线审批通常 1–3 个工作日<br>
+      💵 货币：澳大利亚元（AUD），汇率约 1 AUD ≈ 4.6–4.8 CNY（2025 年参考）<br>
+      💳 支付：信用卡（Visa/Mastercard）广泛接受，部分小店仅接受刷卡或现金
+    </div>
+
+    <div class="sect"><span class="icon">🌡️</span>天气与着装</div>
+    <div class="item-detail">
+      🌡️ 9 月底–10 月初为澳洲春季，悉尼/墨尔本日均温 12–22°C<br>
+      👕 建议：分层穿衣（T恤 + 薄外套/卫衣），海边风大带防风夹克<br>
+      ☀️ 紫外线强：澳洲臭氧层薄，务必带防晒霜和太阳镜
+    </div>
+
+    <div class="sect"><span class="icon">📱</span>通讯与网络</div>
+    <div class="item-detail">
+      📶 电话卡：Telstra / Optus / Vodafone，机场或便利店购买预付 SIM 卡<br>
+      🌐 Google Maps 在澳洲非常好用，公共交通实时查询可用 Opal Travel / Public Transport Victoria App
+    </div>
+
+    <div class="sect"><span class="icon">🔗</span>官方链接</div>
+    <div class="item-detail">
+      🐨 <a href="https://taronga.org.au/taronga-zoo" target="_blank">Taronga Zoo Sydney</a> — 塔龙加动物园官方<br>
+      🚂 <a href="https://puffingbilly.com.au/" target="_blank">Puffing Billy Railway</a> — 普芬比利蒸汽小火车<br>
+      🛣️ <a href="https://www.visitgreatoceanroad.com.au/" target="_blank">Visit Great Ocean Road</a> — 大洋路官方旅游<br>
+      🦘 <a href="https://www.sydney.com/" target="_blank">Sydney.com</a> — 悉尼旅游官方<br>
+      🏙️ <a href="https://www.visitmelbourne.com/" target="_blank">Visit Melbourne</a> — 墨尔本旅游官方
+    </div>
+
+    <div class="callout callout-info">
+      <strong>⚠️ 行前提醒：</strong>澳洲驾车为<strong>右舵左行</strong>，大洋路弯道多且部分路段靠悬崖无护栏，请谨慎驾驶。部分国家公园/保护区需提前预订门票（如十二门徒岩停车场旺季紧张）。国庆期间为澳洲春季旅游平季，人流适中。
+    </div>
+  </div>
+</div>
+
+<footer>
+  🇦🇺 澳大利亚东岸国庆游 · 2025.09.28 – 10.13 · 数据来源 Notion 行程数据库
+</footer>
+
+</body>
+</html>
