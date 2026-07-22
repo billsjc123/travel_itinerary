@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>⛩️ 熊野古道之旅 · 行程文档 (5.31-6.3)</title>
+<style>
+  :root {
+    --bg: #fafafa; --card: #fff; --border: #e0e0e0;
+    --text: #2c2c2c; --muted: #666; --accent: #c0392b;
+    --blue: #2980b9; --green: #27ae60; --orange: #e67e22;
+    --purple: #8e44ad; --red: #e74c3c; --warn-bg: #fff3cd; --warn-border: #ffc107;
+    --shadow: 0 2px 12px rgba(0,0,0,.08); --radius: 14px;
+  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { font-family: -apple-system,"SF Pro Text","Hiragino Sans","Noto Sans SC",sans-serif; background:var(--bg); color:var(--text); line-height:1.7; padding:20px; max-width:900px; margin:auto; }
+
+  /* Header */
+  .hero { text-align:center; padding:40px 20px 30px; }
+  .hero h1 { font-size:28px; letter-spacing:.5px; }
+  .hero .subtitle { font-size:15px; color:var(--muted); margin-top:6px; }
+  .hero .emoji { font-size:48px; display:block; margin-bottom:10px; }
+
+  /* Overview */
+  .overview { display:flex; gap:10px; justify-content:center; flex-wrap:wrap; margin:24px auto; max-width:720px; }
+  .ovw-chip { background:var(--card); border:1px solid var(--border); border-radius:999px; padding:8px 18px; font-size:13px; font-weight:500; }
+
+  /* Day card */
+  .day { background:var(--card); border-radius:var(--radius); box-shadow:var(--shadow); margin:16px 0; overflow:hidden; border-left:4px solid var(--accent); }
+  .day-header { padding:18px 22px 12px; border-bottom:1px solid var(--f0f0f0,#eee); }
+  .day-header .date { font-weight:700; font-size:17px; }
+  .day-header .dow { font-size:13px; color:var(--muted); margin-left:8px; }
+  .day-header .tag { display:inline-block; font-size:11px; padding:2px 10px; border-radius:99px; color:#fff; margin-left:10px; vertical-align:middle; }
+  .tag-flight{background:var(--purple)} .tag-hotel{background:var(--blue)} .tag-hike{background:var(--green)} .tag-transit{background:var(--orange)} .tag-return{background:var(--red)}
+
+  .day-body { padding:16px 22px 22px; }
+
+  /* Timeline item */
+  .item { position:relative; padding-left:26px; margin:16px 0; }
+  .item::before { content:''; position:absolute; left:6px; top:4px; bottom:-4px; width:2px; background:#ddd; }
+  .item:last-child::before { display:none; }
+  .dot { position:absolute; left:2px; top:6px; width:12px; height:12px; border-radius:50%; border:2px solid var(--blue); background:#fff; z-index:1; }
+  .dot.flight{border-color:var(--purple);background:#f3e5f5} .dot.hotel{border-color:var(--blue);background:#e3f2fd}
+  .dot.hike{border-color:var(--green);background:#e8f5e9} .dot.transit{border-color:var(--orange);background:#fff3e0}
+  .dot.return{border-color:var(--red);background:#ffebee} .dot.alert{border-color:var(--red);background:var(--red)}
+  .dot.food{border-color:var(--orange);background:#fff3e0} .dot.onsen{border-color:var(--red);background:#ffebee}
+  .dot.sight{border-color:var(--green);background:#e8f5e9}
+
+  .time-badge { display:inline-block; font-size:12px; font-weight:600; padding:2px 8px; border-radius:6px; background:#eee; color:var(--muted); margin-right:6px; }
+  .item-title { font-weight:600; font-size:15px; }
+  .item-desc { font-size:13.5px; color:var(--muted); margin-top:4px; }
+  .item-desc strong { color:var(--text); }
+  .item-detail { font-size:13px; margin-top:6px; padding:8px 12px; background:#f7f7f7; border-radius:8px; line-height:1.65; }
+
+  /* Warning / callout */
+  .callout { border-radius:10px; padding:14px 18px; margin:14px 0; font-size:13.5px; line-height:1.65; }
+  .callout-warn { background:var(--warn-bg); border:1px solid var(--warn-border); color:#856404; }
+  .callout-info { background:#e8f4fd; border:1px solid #a8d1f0; color:#0c5460; }
+  .callout-danger { background:#fdecea; border:1px solid #f5c6cb; color:#721c24; }
+
+  /* Timetable */
+  .tt { width:100%; border-collapse:collapse; margin:8px 0; font-size:13px; }
+  .tt th { background:#f0f0f0; padding:6px 10px; text-align:left; font-weight:600; }
+  .tt td { padding:5px 10px; border-bottom:1px solid #eee; }
+  .tt tr:hover td { background:#fafafa; }
+  .tt .highlight { background:#fff8e1; font-weight:600; }
+  .src-note { font-size:12px; color:#777; margin:6px 0 2px; }
+  .src-note a { color:var(--blue); }
+
+  /* Section title */
+  .sect { font-size:15px; font-weight:700; margin:18px 0 8px; padding-bottom:4px; border-bottom:2px solid #eee; display:flex; align-items:center; gap:8px; }
+  .sect .icon { font-size:18px; }
+
+  /* Transport badge */
+  .tbadge { display:inline-block; font-size:11px; padding:2px 8px; border-radius:4px; font-weight:500; color:#fff; margin-right:4px; }
+  .tb-bus{background:var(--green)} .tb-train{background:var(--blue)} .tb-shuttle{background:var(--orange)} .tb-walk{background:var(--purple)}
+  .tb-plane{background:var(--purple)} .tb-taxi{background:var(--muted,#888)}
+
+  /* Footer */
+  footer { text-align:center; padding:30px 0 20px; font-size:12px; color:var(--muted); }
+  a { color:var(--blue); text-decoration:none; } a:hover{text-decoration:underline}
+
+  @media print {
+    body{padding:0;background:#fff} .day{box-shadow:none;border:1px solid #ddd} .callout-warn{background:#fffbe6}
+  }
+</style>
+</head>
+<body>
+
+<!-- ===== BACK TO INDEX ===== -->
+<div style="max-width:900px;margin:0 auto;padding:14px 20px 0;">
+  <a href="index.html" style="font-size:13px;color:var(--blue);text-decoration:none;">← 返回所有行程</a>
+</div>
+
+<!-- ===== HERO ===== -->
+<div class="hero">
+  <span class="emoji">⛩️</span>
+  <h1>熊野古道之旅 · 行程文档</h1>
+  <div class="subtitle">香港 → 关西机场 → 白滨 → 熊野本宫大社（中边路徒步）→ 汤峰温泉 → 新宫·速玉/神仓 → 那智大社 → 纪伊胜浦 → 关西<br>May 31 – June 3, 2025 · 端午假期</div>
+</div>
+
+<!-- ===== OVERVIEW CHIPS ===== -->
+<div class="overview">
+  <span class="ovw-chip">✈️ 5/31 香港→大阪 07:05-11:55</span>
+  <span class="ovw-chip">🏨 5/31 白滨 KEY TERRACE SEAMORE</span>
+  <span class="ovw-chip">🥾 6/1 中边路：发心门王子→本宫大社</span>
+  <span class="ovw-chip">♨️ 6/1 世界遗产·汤峰温泉壶汤</span>
+  <span class="ovw-chip">⛩️ 6/2 神仓·速玉·那智大社</span>
+  <span class="ovw-chip">🏨 6/2 纪伊胜浦·浦岛酒店洞窟温泉</span>
+  <span class="ovw-chip">🛫 6/3 纪伊胜浦→关西→香港</span>
+</div>
+
+<!-- ═══════════════ DAY 1 ═══════════════ -->
+<div class="day" style="border-left-color:var(--purple)">
+  <div class="day-header">
+    <span class="date">Day 1 · 5月31日（周六）</span><span class="dow">香港 → 关西 → 白滨</span>
+    <span class="tag tag-flight">✈️ 出发日</span>
+  </div>
+  <div class="day-body">
+
+    <div class="item"><div class="dot flight"></div>
+      <span class="time-badge">07:05</span>
+      <span class="item-title">香港国际机场出发 → 大阪关西 (KIX)</span>
+      <div class="item-desc"><span class="tbadge tb-plane">✈️ 航班</span>飞行约 3h50m，<strong>11:55 抵达关西机场</strong></div>
+    </div>
+
+    <div class="item"><div class="dot transit"></div>
+      <span class="time-badge">13:32</span>
+      <span class="item-title">关西机场 → 日根野 → 白滨</span>
+      <div class="item-desc">
+        <span class="tbadge tb-train">🚆 JR</span>特急「くろしお（黑潮号）」，关西空港线转纪势本线
+      </div>
+      <div class="item-detail">
+        🚆 路线：关西机场站 → 日根野站换乘 → JR白滨站<br>
+        💺 建议提前指定席，くろしお全程约 2 小时；白滨是南纪熊野的门户站
+      </div>
+    </div>
+
+    <div class="item"><div class="dot transit"></div>
+      <span class="time-badge">15:47</span>
+      <span class="item-title">JR白滨站 → 酒店</span>
+      <div class="item-desc"><span class="tbadge tb-bus">🚌 明光巴士</span>白滨町循环巴士，前往白良滨沿岸酒店区</div>
+    </div>
+
+    <div class="item"><div class="dot sight"></div>
+      <span class="time-badge">16:00</span>
+      <span class="item-title">逛关西最大海鲜市场 · とれとれ市場</span>
+      <div class="item-desc">TORETORE ICHIBA，现买现吃金枪鱼、海鲜烧烤，南纪必逛的巨型鱼市场</div>
+    </div>
+
+    <div class="item"><div class="dot food"></div>
+      <span class="time-badge">17:30</span>
+      <span class="item-title">海景 omakase + 白良滨黄昏</span>
+      <div class="item-desc">餐厅：<strong>SHIRAHAMA KEY TERRACE HOTEL SEAMORE</strong>；晚餐后可散步白良滨白沙海滩看落日</div>
+    </div>
+
+    <div class="item"><div class="dot hotel"></div>
+      <span class="time-badge">住宿</span>
+      <span class="item-title">SHIRAHAMA KEY TERRACE HOTEL SEAMORE</span>
+      <div class="item-detail">
+        🏨 白滨海崖上的温泉度假酒店，可泡断崖海景露天风吕（三段浴槽）<br>
+        📍 位置：白良滨南侧海岸，靠近千叠敷、三段壁等海蚀景观
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ═══════════════ DAY 2 ═══════════════ -->
+<div class="day" style="border-left-color:var(--green)">
+  <div class="day-header">
+    <span class="date">Day 2 · 6月1日（周日）</span><span class="dow">白滨 → 中边路徒步 → 汤峰温泉</span>
+    <span class="tag tag-hike">🥾 核心徒步日</span>
+  </div>
+  <div class="day-body">
+
+    <div class="callout callout-info">
+      <strong>今日是熊野古道正片：中边路「发心门王子 → 熊野本宫大社」经典段（约 7km / 4h）。</strong>这是世界遗产「纪伊山地的灵场与参诣道」中人气最高、最易走的一段，沿途经水吞王子、伏拝王子，最后从大斋原鸟居下抵达本宫大社。
+    </div>
+
+    <div class="item"><div class="dot transit"></div>
+      <span class="time-badge">08:06</span>
+      <span class="item-title">白滨 → 熊野本宫大社</span>
+      <div class="item-desc"><span class="tbadge tb-bus">🚌 龙神巴士</span>明光巴士/龙神巴士，白滨方向前往本宫大社前</div>
+    </div>
+
+    <div class="item"><div class="dot transit"></div>
+      <span class="time-badge">09:06</span>
+      <span class="item-title">熊野本宫大社前 → 发心门王子（81路）</span>
+      <div class="item-desc"><span class="tbadge tb-bus">🚌 熊野交通 81路</span>坐到徒步起点「发心门王子」下车</div>
+      <div class="item-detail">
+        🥾 81 路是从本宫大社前往发心门王子的接驳线；先坐车到高处的发心门王子，再一路下坡徒步走回本宫大社，是最省力的走法。
+      </div>
+    </div>
+
+    <div class="item"><div class="dot hike"></div>
+      <span class="time-badge">10:30</span>
+      <span class="item-title">徒步：发心门王子 → 熊野本宫大社（7km / 4h）</span>
+      <div class="item-desc">中边路经典段，沿途村落、茶田与山林参道；抵达前可俯瞰大斋原（旧社地）大鸟居</div>
+      <div class="item-detail">
+        📍 途经：发心门王子 → 水吞王子 → 伏拝王子 → 三軒茶屋迹 → 本宫大社<br>
+        🥾 全程缓下坡为主，路况良好；备水、行动粮，山中补给点有限<br>
+        ⛩️ 终点：<strong>熊野本宫大社</strong>（熊野三山之一，八咫乌信仰中心），旁边大斋原立有日本最大鸟居
+      </div>
+    </div>
+
+    <div class="item"><div class="dot transit"></div>
+      <span class="time-badge">16:27</span>
+      <span class="item-title">本宫大社 → 川汤 / 汤峰温泉</span>
+      <div class="item-desc"><span class="tbadge tb-bus">🚌 熊野交通</span>前往汤峰温泉（湯の峰温泉）</div>
+    </div>
+
+    <div class="item"><div class="dot onsen"></div>
+      <span class="time-badge">17:00</span>
+      <span class="item-title">泡温泉 + 晚餐 · 湯の峰温泉</span>
+      <div class="item-desc">餐饮：<strong>湯の峰温泉 売店・食堂</strong></div>
+      <div class="item-detail">
+        ♨️ <strong>汤峰温泉</strong>是日本最古老的温泉之一（约1800年），也是熊野参诣者的「汤垢离」净身地。<br>
+        🈴 世界遗产名录中唯一可入浴的温泉——<strong>壶汤（つぼ湯）</strong>，一次限一组、约30分钟轮流制，泉色一日数变，值得排队体验。<br>
+        🥚 可在温泉源头用温泉水煮「温泉蛋」。
+      </div>
+    </div>
+
+    <div class="item"><div class="dot hotel"></div>
+      <span class="time-badge">住宿</span>
+      <span class="item-title">J-Hoppers 熊野汤之峰民宿</span>
+      <div class="item-detail">
+        🏨 汤峰温泉区内的青旅/民宿，步行即达壶汤与温泉街，适合徒步后休整。
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ═══════════════ DAY 3 ═══════════════ -->
+<div class="day" style="border-left-color:var(--accent)">
+  <div class="day-header">
+    <span class="date">Day 3 · 6月2日（周一）</span><span class="dow">新宫三社 → 那智大社 → 纪伊胜浦</span>
+    <span class="tag tag-hike">⛩️ 熊野三山日</span>
+  </div>
+  <div class="day-body">
+
+    <div class="callout callout-info">
+      <strong>今日集齐熊野三山另外两山——速玉大社（新宫）与那智大社，并走两段短徒步。</strong>上午在新宫市区+海滨徒步，下午走大门坂石阶参道登那智大社、看那智瀑布。
+    </div>
+
+    <div class="item"><div class="dot transit"></div>
+      <span class="time-badge">08:30</span>
+      <span class="item-title">川汤 / 汤峰 → 神仓大社（新宫）</span>
+      <div class="item-desc"><span class="tbadge tb-bus">🚌 熊野交通</span>前往新宫市，徒步起点神仓神社</div>
+    </div>
+
+    <div class="item"><div class="dot hike"></div>
+      <span class="time-badge">09:30</span>
+      <span class="item-title">城市 + 海滨徒步（约 4h）</span>
+      <div class="item-desc">神仓神社 → 速玉大社 → 阿须贺神社 → 王子神社 → 王子滨 → 高野坂 → 三轮崎</div>
+      <div class="item-detail">
+        ⛩️ <strong>神仓神社</strong>：538 级陡峭石阶登上巨岩「ゴトビキ岩」，熊野信仰的元宫，视野极佳<br>
+        ⛩️ <strong>熊野速玉大社</strong>：熊野三山之一，朱红色社殿华丽<br>
+        🌊 <strong>高野坂</strong>：一段沿海的古道，可俯瞰太平洋海岸线，走到三轮崎
+      </div>
+    </div>
+
+    <div class="item"><div class="dot transit"></div>
+      <span class="time-badge">14:00</span>
+      <span class="item-title">三轮崎 → JR那智站 → 大门坂</span>
+      <div class="item-desc"><span class="tbadge tb-train">🚆 JR</span> + <span class="tbadge tb-bus">🚌 熊野交通</span>前往大门坂徒步口</div>
+    </div>
+
+    <div class="item"><div class="dot hike"></div>
+      <span class="time-badge">14:30</span>
+      <span class="item-title">徒步：大门坂 → 那智大社（约 1.5h）</span>
+      <div class="item-desc">熊野古道最上镜的石阶参道，两侧参天杉木与苔石</div>
+      <div class="item-detail">
+        🌲 <strong>大门坂</strong>：约600m、267级苔藓石阶，夫妇杉夹道，是熊野古道最经典的一段风景<br>
+        ⛩️ <strong>熊野那智大社 + 青岸渡寺</strong>：三山之一，可与<strong>那智瀑布（日本落差最大瀑布，133m）</strong>+ 三重塔同框
+      </div>
+    </div>
+
+    <div class="item"><div class="dot transit"></div>
+      <span class="time-badge">16:00</span>
+      <span class="item-title">那智大社 → 纪伊胜浦</span>
+      <div class="item-desc"><span class="tbadge tb-bus">🚌 熊野交通</span>前往纪伊胜浦温泉港町</div>
+    </div>
+
+    <div class="item"><div class="dot onsen"></div>
+      <span class="time-badge">17:00</span>
+      <span class="item-title">入住浦岛酒店 · 泡洞窟海景温泉</span>
+      <div class="item-desc">酒店：<strong>浦岛酒店-日升馆（ホテル浦島）</strong></div>
+      <div class="item-detail">
+        ♨️ 需从胜浦港乘酒店专属船进入（本身就是体验）；招牌<strong>「忘归洞」</strong>是天然海蚀洞窟温泉，面朝太平洋、浪花拍岸，极具氛围感。<br>
+        🌅 另有「玄武洞」洞窟风吕，可看日出。
+      </div>
+    </div>
+
+    <div class="item"><div class="dot food"></div>
+      <span class="time-badge">19:00</span>
+      <span class="item-title">晚餐：吃和牛 · 焼肉ダイニング和</span>
+      <div class="item-desc">纪伊胜浦市区烧肉店，徒步两天后补充能量</div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ═══════════════ DAY 4 ═══════════════ -->
+<div class="day" style="border-left-color:var(--red)">
+  <div class="day-header">
+    <span class="date">Day 4 · 6月3日（周二）</span><span class="dow">纪伊胜浦 → 关西 → 香港</span>
+    <span class="tag tag-return">🛫 返程日</span>
+  </div>
+  <div class="day-body">
+
+    <div class="item"><div class="dot sight"></div>
+      <span class="time-badge">上午</span>
+      <span class="item-title">纪伊胜浦半日自由活动（~07:00 起）</span>
+      <div class="item-desc">金枪鱼市场早市 · 弁天岛海上鸟居 · 金枪鱼料理午餐</div>
+      <div class="item-detail">
+        🐟 <strong>胜浦金枪鱼市场</strong>：日本近海金枪鱼卸货量数一数二，清晨可看竞拍<br>
+        ⛩️ <strong>弁天岛</strong>：胜浦港内小岛，海上鸟居，可环港散步<br>
+        🍴 午餐：<strong>お食事処 大和</strong>，招牌金枪鱼生鱼片/盖饭
+      </div>
+    </div>
+
+    <div class="item"><div class="dot return"></div>
+      <span class="time-badge">13:46</span>
+      <span class="item-title">纪伊胜浦 → 日根野 → 关西机场</span>
+      <div class="item-desc"><span class="tbadge tb-train">🚆 JR</span>特急「くろしお」返回，日根野换乘关空快速/HARUKA 至 KIX</div>
+    </div>
+
+    <div class="item"><div class="dot return"></div>
+      <span class="time-badge">20:40</span>
+      <span class="item-title">关西机场 → 香港</span>
+      <div class="item-desc"><span class="tbadge tb-plane">✈️ 航班</span><strong>23:55 抵达香港</strong>，行程结束</div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ═══════════════ 参考信息 ═══════════════ -->
+<div class="day" style="border-left-color:var(--blue)">
+  <div class="day-header">
+    <span class="date">🔖 实用信息与官方链接</span>
+  </div>
+  <div class="day-body">
+
+    <div class="sect"><span class="icon">🚌</span>交通要点</div>
+    <div class="callout callout-info">
+      • <strong>南纪熊野的交通核心是巴士</strong>：本宫、汤峰、新宫、那智、胜浦之间主要靠<strong>熊野交通</strong>与<strong>明光/龙神巴士</strong>，班次少、务必先查当日时刻表并预留换乘时间。<br>
+      • <strong>くろしお（黑潮号）</strong>连接关西机场/大阪与白滨、纪伊胜浦，是进出南纪的主干特急，建议指定席。<br>
+      • 若多次坐巴士，可留意「熊野交通巴士一日/二日券」等企划票是否划算。
+    </div>
+
+    <div class="sect"><span class="icon">🔗</span>官方参考链接</div>
+    <div class="item-detail" style="line-height:2">
+      • <a href="https://www.hongu.jp/" target="_blank">熊野本宫大社 官方网站</a><br>
+      • <a href="https://kumanokodo.com/zh/" target="_blank">田边市熊野古道（中边路）中文导览</a><br>
+      • <a href="https://www.tb-kumano.jp/" target="_blank">熊野交通（巴士 / 时刻表 / 企划票）</a><br>
+      • <a href="https://kumano-travel.com/" target="_blank">Kumano Travel 官方预约（住宿 / 行李托运 / 徒步）</a><br>
+      • <a href="https://www.tsuboyu.jp/" target="_blank">湯の峰温泉 · 壶汤（つぼ湯）介绍</a><br>
+      • <a href="https://www.hotelurashima.co.jp/" target="_blank">浦岛酒店（忘归洞·洞窟温泉）</a><br>
+      • <a href="https://kumanonachitaisha.or.jp/" target="_blank">熊野那智大社 官方网站</a><br>
+      • <a href="https://www.westjr.co.jp/global/tc/" target="_blank">JR西日本（くろしお 时刻/指定席）</a>
+    </div>
+
+    <div class="sect"><span class="icon">⚠️</span>行前提醒</div>
+    <ul style="font-size:13.5px;padding-left:20px;line-height:2">
+      <li><strong>巴士班次稀少</strong>：南纪山区巴士一天可能只有几班，错过一班可能等 1-2 小时，务必以当日官方时刻表为准并留足换乘缓冲。</li>
+      <li><strong>徒步装备</strong>：中边路虽平易，仍建议登山鞋、雨具、行动粮与足量饮水；6 月为梅雨季，注意防雨防滑。</li>
+      <li><strong>壶汤（つぼ湯）</strong>：轮流制、一次约30分钟、限一组，旺季需排队，建议尽早前往。</li>
+      <li><strong>浦岛酒店</strong>：需乘专属接驳船进入，请留意末班船时间与办理入住时间。</li>
+      <li><strong>行李托运</strong>：徒步段建议通过 Kumano Travel 或宅急便把大件行李从白滨/本宫直送到胜浦/新宫，轻装徒步。</li>
+    </ul>
+
+  </div>
+</div>
+
+<footer>
+  <p>📄 本行程文档整理自 2025 年端午熊野古道 4 日实际行程 · 时刻与班次以出行当时记录为准，如需复用请再核对官网最新数据</p>
+  <p>山川灵场，参道悠长 ⛩️</p>
+</footer>
+
+</body>
+</html>
